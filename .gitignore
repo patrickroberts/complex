@@ -1,0 +1,5 @@
+coverage/
+docs/**/*
+!docs/_config.yml
+dst/
+node_modules/

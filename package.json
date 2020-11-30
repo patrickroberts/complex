@@ -1,0 +1,65 @@
+{
+  "name": "complex-js",
+  "version": "7.0.0",
+  "description": "Complex math module for JavaScript",
+  "repository": "github:patrickroberts/complex",
+  "homepage": "https://patrickroberts.github.io/complex/",
+  "bugs": "https://github.com/patrickroberts/complex/issues",
+  "main": "dst/cjs/complex.js",
+  "module": "dst/esm/complex.js",
+  "browser": "dst/umd/complex.js",
+  "types": "dst/esm/complex.d.ts",
+  "scripts": {
+    "clean:test": "rimraf coverage",
+    "clean:build": "rimraf dst",
+    "clean:docs": "rimraf docs/**/*.md",
+    "clean": "concurrently 'npm:clean:*'",
+    "lint": "eslint . --ext .js,.ts",
+    "test": "jest --coverage",
+    "build": "rollup --config --environment NODE_ENV:production",
+    "rebuild": "npm run clean:build && npm run build",
+    "docs": "npm run clean:docs && typedoc src/complex.ts",
+    "watch:test": "npm test -- --watch",
+    "watch:build": "npm run build -- --environment NODE_ENV:development --watch",
+    "watch": "concurrently 'npm:watch:*'",
+    "prepublishOnly": "npm run clean && npm run lint && npm test -- --ci && npm run build && npm run docs"
+  },
+  "author": "Patrick Roberts",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@types/jest": "^26.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "@wessberg/rollup-plugin-ts": "^1.3.5",
+    "babel-jest": "^26.5.2",
+    "concurrently": "^5.2.0",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.0",
+    "jest": "^26.5.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.29.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^26.4.1",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.7",
+    "typedoc-plugin-sourcefile-url": "^1.0.6",
+    "typescript": "^4.0.3"
+  },
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "maintained node versions"
+    ],
+    "production": [
+      "defaults"
+    ],
+    "test": [
+      "maintained node versions"
+    ]
+  }
+}

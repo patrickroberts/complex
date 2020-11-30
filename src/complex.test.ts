@@ -1,0 +1,155 @@
+import mock from './__fixtures__/mock';
+
+import SUT from './complex';
+import Component from './component';
+import real from './lazy/real';
+import imag from './lazy/imag';
+import abs from './lazy/abs';
+import arg from './lazy/arg';
+import principal from './principal';
+
+jest.mock('./lazy/real');
+jest.mock('./lazy/imag');
+jest.mock('./lazy/abs');
+jest.mock('./lazy/arg');
+jest.mock('./principal');
+
+beforeEach(() => {
+  mock(real).mockReset();
+  mock(imag).mockReset();
+  mock(abs).mockReset();
+  mock(arg).mockReset();
+  mock(principal).mockReset();
+});
+
+it('should normalize signed zero components', () => {
+  mock(principal).mockReturnValueOnce(0);
+
+  const z = new SUT(-0, -0, -0, -0, Component.ALL);
+
+  expect(z._real).toBe(0);
+  expect(z._imag).toBe(0);
+  expect(z._abs).toBe(0);
+  expect(z._arg).toBe(0);
+});
+
+it('should restrict argument to the principal branch', () => {
+  const testArg = 6.5 * Math.PI;
+  const expectedArg = 0.5 * Math.PI;
+
+  mock(principal).mockReturnValueOnce(expectedArg);
+
+  const z = new SUT(0, 1, 1, testArg, Component.ALL);
+  const actualArg = z._arg;
+
+  expect(principal).toHaveBeenCalledWith(testArg);
+  expect(actualArg).toBe(expectedArg);
+});
+
+it('should lazily compute real value', () => {
+  const testAbs = Math.hypot(3, 4);
+  const testArg = Math.atan2(4, 3);
+  const expectedReal = testAbs * Math.cos(testArg);
+
+  mock(principal).mockImplementationOnce((value) => value);
+  mock(real).mockImplementationOnce((z) => {
+    z._real = expectedReal;
+    z._has |= Component.REAL;
+
+    return expectedReal;
+  });
+
+  const z = new SUT(0, 0, testAbs, testArg, Component.POLAR);
+
+  expect(real).not.toHaveBeenCalled();
+  expect(z._real).toBe(0);
+  expect(z._has).toBe(Component.POLAR);
+
+  const actualReal = z.real;
+
+  expect(real).toHaveBeenCalledWith(z);
+  expect(z._real).toBe(expectedReal);
+  expect(z._has).toBe(Component.POLAR | Component.REAL);
+  expect(actualReal).toBe(expectedReal);
+});
+
+it('should lazily compute imaginary value', () => {
+  const testAbs = Math.hypot(3, 4);
+  const testArg = Math.atan2(4, 3);
+  const expectedImag = testAbs * Math.sin(testArg);
+
+  mock(principal).mockImplementationOnce((value) => value);
+  mock(imag).mockImplementationOnce((z) => {
+    z._imag = expectedImag;
+    z._has |= Component.IMAG;
+
+    return expectedImag;
+  });
+
+  const z = new SUT(0, 0, testAbs, testArg, Component.POLAR);
+
+  expect(imag).not.toHaveBeenCalled();
+  expect(z._imag).toBe(0);
+  expect(z._has).toBe(Component.POLAR);
+
+  const actualImag = z.imag;
+
+  expect(imag).toHaveBeenCalledWith(z);
+  expect(z._imag).toBe(expectedImag);
+  expect(z._has).toBe(Component.POLAR | Component.IMAG);
+  expect(actualImag).toBe(expectedImag);
+});
+
+it('should lazily compute absolute value', () => {
+  const testReal = 3;
+  const testImag = 4;
+  const expectedAbs = Math.hypot(testReal, testImag);
+
+  mock(principal).mockImplementationOnce((value) => value);
+  mock(abs).mockImplementationOnce((z) => {
+    z._abs = expectedAbs;
+    z._has |= Component.ABS;
+
+    return expectedAbs;
+  });
+
+  const z = new SUT(testReal, testImag, 0, 0, Component.CARTESIAN);
+
+  expect(abs).not.toHaveBeenCalled();
+  expect(z._abs).toBe(0);
+  expect(z._has).toBe(Component.CARTESIAN);
+
+  const actualAbs = z.abs;
+
+  expect(abs).toHaveBeenCalledWith(z);
+  expect(z._abs).toBe(expectedAbs);
+  expect(z._has).toBe(Component.CARTESIAN | Component.ABS);
+  expect(actualAbs).toBe(expectedAbs);
+});
+
+it('should lazily compute argument', () => {
+  const testReal = 3;
+  const testImag = 4;
+  const expectedArg = Math.atan2(testImag, testReal);
+
+  mock(principal).mockImplementationOnce((value) => value);
+  mock(arg).mockImplementationOnce((z) => {
+    z._arg = expectedArg;
+    z._has |= Component.ARG;
+
+    return expectedArg;
+  });
+
+  const z = new SUT(testReal, testImag, 0, 0, Component.CARTESIAN);
+
+  expect(arg).not.toHaveBeenCalled();
+  expect(z._arg).toBe(0);
+  expect(z._has).toBe(Component.CARTESIAN);
+
+  const actualArg = z.arg;
+
+  expect(arg).toHaveBeenCalledWith(z);
+  expect(z._arg).toBe(expectedArg);
+  expect(z._has).toBe(Component.CARTESIAN | Component.ARG);
+  expect(actualArg).toBe(expectedArg);
+});

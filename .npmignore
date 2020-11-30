@@ -1,0 +1,14 @@
+.github/
+coverage/
+docs/
+dst/cjs/*.d.ts
+dst/cjs/*.d.ts.map
+dst/umd/*.d.ts
+dst/umd/*.d.ts.map
+src/
+.eslintignore
+.eslintrc.json
+jest.config.js
+rollup.config.js
+tsconfig.json
+typedoc.json
