@@ -2,19 +2,25 @@ import mock from './__fixtures__/mock';
 
 import SUT from './complex';
 import Component from './component';
-import real from './lazy/real';
-import imag from './lazy/imag';
-import abs from './lazy/abs';
-import arg from './lazy/arg';
+import cartesian from './from/cartesian';
+import polar from './from/polar';
+import real from './accessors/real';
+import imag from './accessors/imag';
+import abs from './accessors/abs';
+import arg from './accessors/arg';
 import principal from './principal';
 
-jest.mock('./lazy/real');
-jest.mock('./lazy/imag');
-jest.mock('./lazy/abs');
-jest.mock('./lazy/arg');
+jest.mock('./from/cartesian');
+jest.mock('./from/polar');
+jest.mock('./accessors/real');
+jest.mock('./accessors/imag');
+jest.mock('./accessors/abs');
+jest.mock('./accessors/arg');
 jest.mock('./principal');
 
 beforeEach(() => {
+  mock(cartesian).mockReset();
+  mock(polar).mockReset();
   mock(real).mockReset();
   mock(imag).mockReset();
   mock(abs).mockReset();
@@ -44,6 +50,46 @@ it('should restrict argument to the principal branch', () => {
 
   expect(principal).toHaveBeenCalledWith(testArg);
   expect(actualArg).toBe(expectedArg);
+});
+
+describe('Complex.cartesian', () => {
+  beforeEach(() => {
+    mock(cartesian).mockImplementation((): any => ({}));
+  });
+
+  it('should delegate to cartesian', () => {
+    const actual = SUT.cartesian(3, 4);
+
+    expect(cartesian).toHaveBeenCalledWith(SUT, 3, 4);
+    expect(cartesian).toHaveReturnedWith(actual);
+  });
+
+  it('should delegate with default imaginary value', () => {
+    const actual = SUT.cartesian(3);
+
+    expect(cartesian).toHaveBeenCalledWith(SUT, 3, 0);
+    expect(cartesian).toHaveReturnedWith(actual);
+  });
+});
+
+describe('Complex.polar', () => {
+  beforeEach(() => {
+    mock(polar).mockImplementation((): any => ({}));
+  });
+
+  it('should delegate to polar', () => {
+    const actual = SUT.polar(2, Math.PI);
+
+    expect(polar).toHaveBeenCalledWith(SUT, 2, Math.PI);
+    expect(polar).toHaveReturnedWith(actual);
+  });
+
+  it('should delegate with default argument', () => {
+    const actual = SUT.polar(3);
+
+    expect(polar).toHaveBeenCalledWith(SUT, 3, 0);
+    expect(polar).toHaveReturnedWith(actual);
+  });
 });
 
 it('should lazily compute real value', () => {

@@ -1,8 +1,14 @@
 import Component from './component';
-import real from './lazy/real';
-import imag from './lazy/imag';
-import abs from './lazy/abs';
-import arg from './lazy/arg';
+import _real from './accessors/real';
+import _imag from './accessors/imag';
+import _abs from './accessors/abs';
+import _arg from './accessors/arg';
+import cartesian from './from/cartesian';
+import polar from './from/polar';
+import add from './binary/add';
+import subtract from './binary/subtract';
+import multiply from './binary/multiply';
+import divide from './binary/divide';
 import principal from './principal';
 
 export default class Complex {
@@ -22,27 +28,51 @@ export default class Complex {
   public _has: Component;
 
   /** @internal */
-  public constructor(_real: number, _imag: number, _abs: number, _arg: number, _has: Component) {
-    this._real = _real + 0;
-    this._imag = _imag + 0;
-    this._abs = _abs + 0;
-    this._arg = principal(_arg);
-    this._has = _has;
+  public constructor(real: number, imag: number, abs: number, arg: number, has: Component) {
+    this._real = real + 0;
+    this._imag = imag + 0;
+    this._abs = abs + 0;
+    this._arg = principal(arg);
+    this._has = has;
   }
 
   public get real(): number {
-    return real(this);
+    return _real(this);
   }
 
   public get imag(): number {
-    return imag(this);
+    return _imag(this);
   }
 
   public get abs(): number {
-    return abs(this);
+    return _abs(this);
   }
 
   public get arg(): number {
-    return arg(this);
+    return _arg(this);
+  }
+
+  public static cartesian(real: number, imag = 0): Complex {
+    return cartesian(Complex, real, imag);
+  }
+
+  public static polar(abs: number, arg = 0): Complex {
+    return polar(Complex, abs, arg);
+  }
+
+  public add(z: Complex): Complex {
+    return add(Complex, this, z);
+  }
+
+  public subtract(z: Complex): Complex {
+    return subtract(Complex, this, z);
+  }
+
+  public multiply(z: Complex): Complex {
+    return multiply(Complex, this, z);
+  }
+
+  public divide(z: Complex): Complex {
+    return divide(Complex, this, z);
   }
 }
