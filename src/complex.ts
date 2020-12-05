@@ -9,6 +9,7 @@ import add from './binary/add';
 import subtract from './binary/subtract';
 import multiply from './binary/multiply';
 import divide from './binary/divide';
+import pow from './binary/pow';
 import principal from './principal';
 
 export default class Complex {
@@ -74,5 +75,9 @@ export default class Complex {
 
   public divide(z: Complex): Complex {
     return divide(Complex, this, z);
+  }
+
+  public pow(z: Complex): Complex {
+    return pow(Complex, this, z);
   }
 }

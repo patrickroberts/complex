@@ -5,17 +5,17 @@ import Complex from '../complex';
 import Component from '../component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
+import cartesian from '../from/cartesian';
 import * as add from './add';
 
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
-
-const cartesian = jest.spyOn(Complex, 'cartesian');
+jest.mock('../from/cartesian');
 
 beforeEach(() => {
-  cartesian.mockReset();
   mock(real).mockReset();
   mock(imag).mockReset();
+  mock(cartesian).mockReset();
 });
 
 describe('add', () => {
@@ -38,7 +38,7 @@ describe('add', () => {
     expect(real).toHaveBeenCalledWith(b);
     expect(imag).toHaveBeenCalledWith(a);
     expect(imag).toHaveBeenCalledWith(b);
-    expect(cartesian).toHaveBeenCalledWith(expected[0], expected[1]);
+    expect(cartesian).toHaveBeenCalledWith(Complex, expected[0], expected[1]);
   });
 });
 

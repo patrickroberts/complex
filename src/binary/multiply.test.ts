@@ -7,23 +7,24 @@ import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
+import cartesian from '../from/cartesian';
+import polar from '../from/polar';
 import * as multiply from './multiply';
 
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
 jest.mock('../accessors/abs');
 jest.mock('../accessors/arg');
-
-const cartesian = jest.spyOn(Complex, 'cartesian');
-const polar = jest.spyOn(Complex, 'polar');
+jest.mock('../from/cartesian');
+jest.mock('../from/polar');
 
 beforeEach(() => {
-  cartesian.mockReset();
-  polar.mockReset();
   mock(real).mockReset();
   mock(imag).mockReset();
   mock(abs).mockReset();
   mock(arg).mockReset();
+  mock(cartesian).mockReset();
+  mock(polar).mockReset();
 });
 
 describe('multiply', () => {
@@ -46,7 +47,7 @@ describe('multiply', () => {
     expect(real).toHaveBeenCalledWith(b);
     expect(imag).toHaveBeenCalledWith(a);
     expect(imag).toHaveBeenCalledWith(b);
-    expect(cartesian).toHaveBeenCalledWith(expected[0], expected[1]);
+    expect(cartesian).toHaveBeenCalledWith(Complex, expected[0], expected[1]);
   });
 
   test.each([
@@ -66,8 +67,9 @@ describe('multiply', () => {
     expect(abs).toHaveBeenCalledWith(b);
     expect(arg).toHaveBeenCalledWith(a);
     expect(arg).toHaveBeenCalledWith(b);
-    expect(polar.mock.calls[0][0]).toBeCloseTo(expected[0], numDigits);
-    expect(polar.mock.calls[0][1]).toBeCloseTo(expected[1], numDigits);
+    expect(mock(polar).mock.calls[0][0]).toBe(Complex);
+    expect(mock(polar).mock.calls[0][1]).toBeCloseTo(expected[0], numDigits);
+    expect(mock(polar).mock.calls[0][2]).toBeCloseTo(expected[1], numDigits);
   });
 });
 
