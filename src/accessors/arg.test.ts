@@ -1,43 +1,49 @@
 import mock from '../__fixtures__/mock';
 
-import Component from '../component';
+import Complex from '../complex';
+import Component from '../internal/component';
+import normalize from '../internal/normalize';
+import principal from '../internal/principal';
 import arg from '../math/arg';
 import sut from './arg';
 
+jest.mock('../internal/normalize');
+jest.mock('../internal/principal');
 jest.mock('../math/arg');
+
+beforeAll(() => {
+  mock(normalize).mockImplementation((value) => value);
+  mock(principal).mockImplementation((value) => value);
+});
 
 beforeEach(() => {
   mock(arg).mockReset();
 });
 
 it('should not modify computed value if argument is present', () => {
-  const expectedArg = Math.PI / 3;
-  const z = {
-    _real: 0, _imag: 0, _abs: 1, _arg: expectedArg, _has: Component.POLAR,
-  };
+  const expected = Math.PI / 3;
+  const z = new Complex(0, 0, 1, expected, Component.POLAR);
 
-  const actualArg = sut(z);
+  const actual = sut(z);
 
   expect(arg).not.toHaveBeenCalled();
-  expect(z._arg).toBe(expectedArg);
+  expect(z._arg).toBe(expected);
   expect(z._has).toBe(Component.POLAR);
-  expect(actualArg).toBe(expectedArg);
+  expect(actual).toBe(expected);
 });
 
 it('should modify computed value if argument is not present', () => {
-  const testReal = 1;
-  const testImag = Math.sqrt(3);
-  const expectedArg = Math.PI / 3;
-  const z = {
-    _real: testReal, _imag: testImag, _abs: 0, _arg: 0, _has: Component.CARTESIAN,
-  };
+  const real = 1;
+  const imag = Math.sqrt(3);
+  const expected = Math.PI / 3;
+  const z = new Complex(real, imag, 0, 0, Component.CARTESIAN);
 
-  mock(arg).mockReturnValueOnce(expectedArg);
+  mock(arg).mockReturnValueOnce(expected);
 
-  const actualarg = sut(z);
+  const actual = sut(z);
 
-  expect(arg).toHaveBeenCalledWith(testReal, testImag);
-  expect(z._arg).toBe(expectedArg);
+  expect(arg).toHaveBeenCalledWith(real, imag);
+  expect(z._arg).toBe(expected);
   expect(z._has).toBe(Component.CARTESIAN | Component.ARG);
-  expect(actualarg).toBe(expectedArg);
+  expect(actual).toBe(expected);
 });

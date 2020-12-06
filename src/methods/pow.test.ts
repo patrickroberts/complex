@@ -2,7 +2,7 @@ import mock from '../__fixtures__/mock';
 import Spy from '../__fixtures__/spy';
 
 import Complex from '../complex';
-import Component from '../component';
+import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';

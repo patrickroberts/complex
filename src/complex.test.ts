@@ -1,55 +1,69 @@
 import mock from './__fixtures__/mock';
 
 import SUT from './complex';
-import Component from './component';
-import cartesian from './from/cartesian';
-import polar from './from/polar';
+import Component from './internal/component';
+import normalize from './internal/normalize';
+import principal from './internal/principal';
 import real from './accessors/real';
 import imag from './accessors/imag';
 import abs from './accessors/abs';
 import arg from './accessors/arg';
-import principal from './principal';
+import cartesian from './static/cartesian';
+import polar from './static/polar';
 
-jest.mock('./from/cartesian');
-jest.mock('./from/polar');
+jest.mock('./internal/normalize');
+jest.mock('./internal/principal');
 jest.mock('./accessors/real');
 jest.mock('./accessors/imag');
 jest.mock('./accessors/abs');
 jest.mock('./accessors/arg');
-jest.mock('./principal');
+jest.mock('./static/cartesian');
+jest.mock('./static/polar');
 
 beforeEach(() => {
-  mock(cartesian).mockReset();
-  mock(polar).mockReset();
+  mock(normalize).mockReset();
+  mock(principal).mockReset();
   mock(real).mockReset();
   mock(imag).mockReset();
   mock(abs).mockReset();
   mock(arg).mockReset();
-  mock(principal).mockReset();
+  mock(cartesian).mockReset();
+  mock(polar).mockReset();
 });
 
-it('should normalize signed zero components', () => {
-  mock(principal).mockReturnValueOnce(0);
+describe('constructor', () => {
+  it('should normalize components', () => {
+    mock(normalize).mockImplementation((value) => value);
+    mock(principal).mockImplementation((value) => value);
 
-  const z = new SUT(-0, -0, -0, -0, Component.ALL);
+    const _real = 1;
+    const _imag = Math.sqrt(3);
+    const _abs = 2;
+    const _arg = Math.PI / 3;
 
-  expect(z._real).toBe(0);
-  expect(z._imag).toBe(0);
-  expect(z._abs).toBe(0);
-  expect(z._arg).toBe(0);
-});
+    const actual = new SUT(_real, _imag, _abs, _arg, Component.ALL);
 
-it('should restrict argument to the principal branch', () => {
-  const testArg = 6.5 * Math.PI;
-  const expectedArg = 0.5 * Math.PI;
+    expect(normalize).toHaveBeenCalledWith(_real);
+    expect(normalize).toHaveBeenCalledWith(_imag);
+    expect(normalize).toHaveBeenCalledWith(_abs);
+    expect(principal).toHaveBeenCalledWith(_arg);
+    expect(actual._real).toBe(_real);
+    expect(actual._imag).toBe(_imag);
+    expect(actual._abs).toBe(_abs);
+    expect(actual._arg).toBe(_arg);
+  });
 
-  mock(principal).mockReturnValueOnce(expectedArg);
+  it('should restrict argument to the principal branch', () => {
+    const testArg = 6.5 * Math.PI;
+    const expectedArg = 0.5 * Math.PI;
 
-  const z = new SUT(0, 1, 1, testArg, Component.ALL);
-  const actualArg = z._arg;
+    mock(principal).mockReturnValueOnce(expectedArg);
 
-  expect(principal).toHaveBeenCalledWith(testArg);
-  expect(actualArg).toBe(expectedArg);
+    const actual = new SUT(0, 1, 1, testArg, Component.ALL);
+
+    expect(principal).toHaveBeenCalledWith(testArg);
+    expect(actual._arg).toBe(expectedArg);
+  });
 });
 
 describe('Complex.cartesian', () => {
@@ -97,6 +111,7 @@ it('should lazily compute real value', () => {
   const testArg = Math.atan2(4, 3);
   const expectedReal = testAbs * Math.cos(testArg);
 
+  mock(normalize).mockImplementation((value) => value);
   mock(principal).mockImplementationOnce((value) => value);
   mock(real).mockImplementationOnce((z) => {
     z._real = expectedReal;
@@ -124,6 +139,7 @@ it('should lazily compute imaginary value', () => {
   const testArg = Math.atan2(4, 3);
   const expectedImag = testAbs * Math.sin(testArg);
 
+  mock(normalize).mockImplementation((value) => value);
   mock(principal).mockImplementationOnce((value) => value);
   mock(imag).mockImplementationOnce((z) => {
     z._imag = expectedImag;
@@ -151,6 +167,7 @@ it('should lazily compute absolute value', () => {
   const testImag = 4;
   const expectedAbs = Math.hypot(testReal, testImag);
 
+  mock(normalize).mockImplementation((value) => value);
   mock(principal).mockImplementationOnce((value) => value);
   mock(abs).mockImplementationOnce((z) => {
     z._abs = expectedAbs;

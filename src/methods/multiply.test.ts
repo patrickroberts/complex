@@ -2,21 +2,21 @@ import mock from '../__fixtures__/mock';
 import Spy from '../__fixtures__/spy';
 
 import Complex from '../complex';
-import Component from '../component';
+import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
-import cartesian from '../from/cartesian';
-import polar from '../from/polar';
-import * as divide from './divide';
+import cartesian from '../static/cartesian';
+import polar from '../static/polar';
+import * as multiply from './multiply';
 
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
 jest.mock('../accessors/abs');
 jest.mock('../accessors/arg');
-jest.mock('../from/cartesian');
-jest.mock('../from/polar');
+jest.mock('../static/cartesian');
+jest.mock('../static/polar');
 
 beforeEach(() => {
   mock(real).mockReset();
@@ -27,13 +27,13 @@ beforeEach(() => {
   mock(polar).mockReset();
 });
 
-describe('divide', () => {
-  const sut = divide.default;
+describe('multiply', () => {
+  const sut = multiply.default;
 
   test.each([
-    [[0, 0], [0, 0], [NaN, NaN]],
-    [[1, 2], [3, 4], [0.44, 0.08]],
-    [[-1, 2], [3, -4], [-0.44, 0.08]],
+    [[0, 0], [0, 0], [0, 0]],
+    [[1, 2], [3, 4], [-5, 10]],
+    [[-1, 2], [3, -4], [5, 10]],
   ])('should compute cartesian components', (lhs, rhs, expected) => {
     const a = new Complex(lhs[0], lhs[1], 0, 0, Component.CARTESIAN);
     const b = new Complex(rhs[0], rhs[1], 0, 0, Component.CARTESIAN);
@@ -51,9 +51,9 @@ describe('divide', () => {
   });
 
   test.each([
-    [[0, 0], [0, 0], [NaN, 0]],
-    [[5, Math.PI / 2], [2, -Math.PI / 2], [2.5, Math.PI]],
-    [[2, Math.PI / 3], [4, -Math.PI / 6], [0.5, Math.PI / 2]],
+    [[0, 0], [0, 0], [0, 0]],
+    [[5, Math.PI / 2], [2, -Math.PI / 2], [10, 0]],
+    [[2, Math.PI / 3], [4, -Math.PI / 6], [8, Math.PI / 6]],
   ])('should compute polar components', (lhs, rhs, expected, numDigits = 14) => {
     const a = new Complex(0, 0, lhs[0], lhs[1], Component.POLAR);
     const b = new Complex(0, 0, rhs[0], rhs[1], Component.POLAR);
@@ -67,33 +67,28 @@ describe('divide', () => {
     expect(abs).toHaveBeenCalledWith(b);
     expect(arg).toHaveBeenCalledWith(a);
     expect(arg).toHaveBeenCalledWith(b);
-
-    if (expected.some(Number.isNaN)) {
-      expect(polar).toHaveBeenCalledWith(Complex, expected[0], expected[1]);
-    } else {
-      expect(mock(polar).mock.calls[0][0]).toBe(Complex);
-      expect(mock(polar).mock.calls[0][1]).toBeCloseTo(expected[0], numDigits);
-      expect(mock(polar).mock.calls[0][2]).toBeCloseTo(expected[1], numDigits);
-    }
+    expect(mock(polar).mock.calls[0][0]).toBe(Complex);
+    expect(mock(polar).mock.calls[0][1]).toBeCloseTo(expected[0], numDigits);
+    expect(mock(polar).mock.calls[0][2]).toBeCloseTo(expected[1], numDigits);
   });
 });
 
-describe('Complex.prototype.divide', () => {
-  let sut: Spy<typeof divide.default>;
+describe('Complex.prototype.multiply', () => {
+  let sut: Spy<typeof multiply.default>;
 
   beforeAll(() => {
-    sut = jest.spyOn(divide, 'default');
+    sut = jest.spyOn(multiply, 'default');
   });
 
   afterAll(() => {
     sut.mockRestore();
   });
 
-  it('should delegate to divide', () => {
+  it('should delegate to multiply', () => {
     const a = new Complex(1, 2, 0, 0, Component.CARTESIAN);
     const b = new Complex(3, 4, 0, 0, Component.CARTESIAN);
 
-    const actual = a.divide(b);
+    const actual = a.multiply(b);
 
     expect(sut).toHaveBeenCalledWith(Complex, a, b);
     expect(sut).toHaveReturnedWith(actual);

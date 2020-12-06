@@ -20,7 +20,9 @@
       "error",
       "interface"
     ],
+    "@typescript-eslint/lines-between-class-members": "error",
     "@typescript-eslint/member-delimiter-style": "error",
+    "@typescript-eslint/no-dupe-class-members": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-shadow": "error",
@@ -41,7 +43,9 @@
         ]
       }
     ],
+    "lines-between-class-members": "off",
     "no-bitwise": "off",
+    "no-dupe-class-members": "off",
     "no-param-reassign": [
       "error",
       {

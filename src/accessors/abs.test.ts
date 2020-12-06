@@ -1,43 +1,49 @@
 import mock from '../__fixtures__/mock';
 
-import Component from '../component';
+import Complex from '../complex';
+import Component from '../internal/component';
+import normalize from '../internal/normalize';
+import principal from '../internal/principal';
 import abs from '../math/abs';
 import sut from './abs';
 
+jest.mock('../internal/normalize');
+jest.mock('../internal/principal');
 jest.mock('../math/abs');
+
+beforeAll(() => {
+  mock(normalize).mockImplementation((value) => value);
+  mock(principal).mockImplementation((value) => value);
+});
 
 beforeEach(() => {
   mock(abs).mockReset();
 });
 
 it('should not modify computed value if absolute value is present', () => {
-  const expectedAbs = 5;
-  const z = {
-    _real: 0, _imag: 0, _abs: expectedAbs, _arg: 0, _has: Component.POLAR,
-  };
+  const expected = 5;
+  const z = new Complex(0, 0, expected, 0, Component.POLAR);
 
-  const actualAbs = sut(z);
+  const actual = sut(z);
 
   expect(abs).not.toHaveBeenCalled();
-  expect(z._abs).toBe(expectedAbs);
+  expect(z._abs).toBe(expected);
   expect(z._has).toBe(Component.POLAR);
-  expect(actualAbs).toBe(expectedAbs);
+  expect(actual).toBe(expected);
 });
 
 it('should modify computed value if absolute value is not present', () => {
-  const testReal = 3;
-  const testImag = 4;
-  const expectedAbs = 5;
-  const z = {
-    _real: testReal, _imag: testImag, _abs: 0, _arg: 0, _has: Component.CARTESIAN,
-  };
+  const real = 3;
+  const imag = 4;
+  const expected = 5;
+  const z = new Complex(real, imag, 0, 0, Component.CARTESIAN);
 
-  mock(abs).mockReturnValueOnce(expectedAbs);
+  mock(abs).mockReturnValueOnce(expected);
 
-  const actualAbs = sut(z);
+  const actual = sut(z);
 
-  expect(abs).toHaveBeenCalledWith(testReal, testImag);
-  expect(z._abs).toBe(expectedAbs);
+  expect(abs).toHaveBeenCalledWith(real, imag);
+  expect(z._abs).toBe(expected);
   expect(z._has).toBe(Component.CARTESIAN | Component.ABS);
-  expect(actualAbs).toBe(expectedAbs);
+  expect(actual).toBe(expected);
 });

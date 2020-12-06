@@ -1,43 +1,49 @@
 import mock from '../__fixtures__/mock';
 
-import Component from '../component';
+import Complex from '../complex';
+import Component from '../internal/component';
+import normalize from '../internal/normalize';
+import principal from '../internal/principal';
 import imag from '../math/imag';
 import sut from './imag';
 
+jest.mock('../internal/normalize');
+jest.mock('../internal/principal');
 jest.mock('../math/imag');
+
+beforeAll(() => {
+  mock(normalize).mockImplementation((value) => value);
+  mock(principal).mockImplementation((value) => value);
+});
 
 beforeEach(() => {
   mock(imag).mockReset();
 });
 
 it('should not modify computed value if imaginary value value is present', () => {
-  const expectedImag = 4;
-  const z = {
-    _real: 3, _imag: expectedImag, _abs: 0, _arg: 0, _has: Component.CARTESIAN,
-  };
+  const expected = 4;
+  const z = new Complex(3, expected, 0, 0, Component.CARTESIAN);
 
-  const actualImag = sut(z);
+  const actual = sut(z);
 
   expect(imag).not.toHaveBeenCalled();
-  expect(z._imag).toBe(expectedImag);
+  expect(z._imag).toBe(expected);
   expect(z._has).toBe(Component.CARTESIAN);
-  expect(actualImag).toBe(expectedImag);
+  expect(actual).toBe(expected);
 });
 
 it('should modify computed value if imaginary value is not present', () => {
-  const testAbs = 2;
-  const testArg = Math.PI / 3;
-  const expectedImag = Math.sqrt(3);
-  const z = {
-    _real: 0, _imag: 0, _abs: testAbs, _arg: testArg, _has: Component.POLAR,
-  };
+  const abs = 2;
+  const arg = Math.PI / 3;
+  const expected = Math.sqrt(3);
+  const z = new Complex(0, 0, abs, arg, Component.POLAR);
 
-  mock(imag).mockReturnValueOnce(expectedImag);
+  mock(imag).mockReturnValueOnce(expected);
 
-  const actualImag = sut(z);
+  const actual = sut(z);
 
-  expect(imag).toHaveBeenCalledWith(testAbs, testArg);
-  expect(z._imag).toBe(expectedImag);
+  expect(imag).toHaveBeenCalledWith(abs, arg);
+  expect(z._imag).toBe(expected);
   expect(z._has).toBe(Component.POLAR | Component.IMAG);
-  expect(actualImag).toBe(expectedImag);
+  expect(actual).toBe(expected);
 });

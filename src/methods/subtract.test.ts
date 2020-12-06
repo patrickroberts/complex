@@ -2,15 +2,15 @@ import mock from '../__fixtures__/mock';
 import Spy from '../__fixtures__/spy';
 
 import Complex from '../complex';
-import Component from '../component';
+import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
-import cartesian from '../from/cartesian';
+import cartesian from '../static/cartesian';
 import * as subtract from './subtract';
 
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
-jest.mock('../from/cartesian');
+jest.mock('../static/cartesian');
 
 beforeEach(() => {
   mock(real).mockReset();

@@ -1,8 +1,8 @@
-import Component from '../component';
-import IComplex from '../icomplex';
+import Complex from '../complex';
+import Component from '../internal/component';
 import abs from '../math/abs';
 
-export default (z: IComplex): number => {
+export default (z: Complex): number => {
   if (!(z._has & Component.ABS)) {
     z._abs = abs(z._real, z._imag);
     z._has |= Component.ABS;

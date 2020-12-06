@@ -1,10 +1,10 @@
 import Complex from '../complex';
-import Component from '../component';
+import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
-import polar from '../from/polar';
+import polar from '../static/polar';
 import multiply from './multiply';
 import divide from './divide';
 

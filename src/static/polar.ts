@@ -1,5 +1,5 @@
 import Complex from '../complex';
-import Component from '../component';
+import Component from '../internal/component';
 
 export default (Ctor: typeof Complex, abs: number, arg: number): Complex => new Ctor(
   0, 0, abs, arg, Component.POLAR,
