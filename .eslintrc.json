@@ -15,6 +15,7 @@
     "@typescript-eslint",
     "jest"
   ],
+  "root": true,
   "rules": {
     "@typescript-eslint/consistent-type-definitions": [
       "error",

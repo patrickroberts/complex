@@ -1,4 +1,4 @@
-import mock from '../__fixtures__/mock';
+import _ from '../__fixtures__/any/number';
 
 import Complex from '../complex';
 import Component from '../internal/component';
@@ -6,15 +6,11 @@ import sut from './polar';
 
 jest.mock('../complex');
 
-const _ = expect.any(Number);
+it('should delegate to constructor', () => {
+  const testAbs = {} as number;
+  const testArg = {} as number;
+  const actual = sut(Complex, testAbs, testArg);
 
-beforeAll(() => {
-  mock(Complex).mockImplementation((): any => ({}));
-});
-
-it('should delegate to Complex constructor', () => {
-  const actual = sut(Complex, 2, Math.PI);
-
-  expect(Complex).toHaveBeenCalledWith(_, _, 2, Math.PI, Component.POLAR);
+  expect(Complex).toHaveBeenCalledWith(_, _, testAbs, testArg, Component.POLAR);
   expect(Complex).toHaveReturnedWith(actual);
 });

@@ -8,6 +8,8 @@ import _arg from './accessors/arg';
 import from from './static/from';
 import cartesian from './static/cartesian';
 import polar from './static/polar';
+import exp from './static/exp';
+import log from './static/log';
 import add from './methods/add';
 import subtract from './methods/subtract';
 import multiply from './methods/multiply';
@@ -61,6 +63,18 @@ export default class Complex {
 
   public static polar(abs: number, arg = 0): Complex {
     return polar(Complex, abs, arg);
+  }
+
+  public static exp(z: Complex): Complex;
+  public static exp(real: number, imag?: number): Complex;
+  public static exp(r: Complex | number, i = 0): Complex {
+    return exp(Complex, from(Complex, r, i));
+  }
+
+  public static log(z: Complex): Complex;
+  public static log(real: number, imag?: number): Complex;
+  public static log(r: Complex | number, i = 0): Complex {
+    return log(Complex, from(Complex, r, i));
   }
 
   public add(z: Complex): Complex;

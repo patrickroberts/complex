@@ -1,65 +1,38 @@
+import _ from '../__fixtures__/any/number';
 import mock from '../__fixtures__/mock';
-import Spy from '../__fixtures__/spy';
 
 import Complex from '../complex';
 import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
 import cartesian from '../static/cartesian';
-import * as subtract from './subtract';
+import sut from './subtract';
 
+jest.mock('../complex');
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
 jest.mock('../static/cartesian');
 
 beforeEach(() => {
-  mock(real).mockReset();
-  mock(imag).mockReset();
-  mock(cartesian).mockReset();
+  mock(real).mockClear();
+  mock(imag).mockClear();
+  mock(cartesian).mockClear();
 });
 
-describe('subtract', () => {
-  const sut = subtract.default;
+test.each([
+  [[0, 0], [0, 0], [0, 0]],
+  [[1, 2], [3, 4], [-2, -2]],
+  [[-1, 2], [3, -4], [-4, 6]],
+])('should compute cartesian components', (lhs, rhs, expected) => {
+  const a = new Complex(lhs[0], lhs[1], _, _, Component.CARTESIAN);
+  const b = new Complex(rhs[0], rhs[1], _, _, Component.CARTESIAN);
 
-  test.each([
-    [[0, 0], [0, 0], [0, 0]],
-    [[1, 2], [3, 4], [-2, -2]],
-    [[-1, 2], [3, -4], [-4, 6]],
-  ])('should compute cartesian components', (lhs, rhs, expected) => {
-    const a = new Complex(lhs[0], lhs[1], 0, 0, Component.CARTESIAN);
-    const b = new Complex(rhs[0], rhs[1], 0, 0, Component.CARTESIAN);
+  const actual = sut(Complex, a, b);
 
-    mock(real).mockImplementation((z) => z._real);
-    mock(imag).mockImplementation((z) => z._imag);
-
-    sut(Complex, a, b);
-
-    expect(real).toHaveBeenCalledWith(a);
-    expect(real).toHaveBeenCalledWith(b);
-    expect(imag).toHaveBeenCalledWith(a);
-    expect(imag).toHaveBeenCalledWith(b);
-    expect(cartesian).toHaveBeenCalledWith(Complex, expected[0], expected[1]);
-  });
-});
-
-describe('Complex.prototype.subtract', () => {
-  let sut: Spy<typeof subtract.default>;
-
-  beforeAll(() => {
-    sut = jest.spyOn(subtract, 'default');
-  });
-
-  afterAll(() => {
-    sut.mockRestore();
-  });
-
-  it('should delegate to subtract', () => {
-    const a = new Complex(1, 2, 0, 0, Component.CARTESIAN);
-    const b = new Complex(3, 4, 0, 0, Component.CARTESIAN);
-
-    const actual = a.subtract(b);
-
-    expect(sut).toHaveBeenCalledWith(Complex, a, b);
-    expect(sut).toHaveReturnedWith(actual);
-  });
+  expect(real).toHaveBeenCalledWith(a);
+  expect(real).toHaveBeenCalledWith(b);
+  expect(imag).toHaveBeenCalledWith(a);
+  expect(imag).toHaveBeenCalledWith(b);
+  expect(cartesian).toHaveBeenCalledWith(Complex, expected[0], expected[1]);
+  expect(cartesian).toHaveReturnedWith(actual);
 });

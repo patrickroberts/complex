@@ -1,49 +1,50 @@
+import _ from '../__fixtures__/any/number';
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import Component from '../internal/component';
-import normalize from '../internal/normalize';
-import principal from '../internal/principal';
 import real from '../math/real';
 import sut from './real';
 
-jest.mock('../internal/normalize');
-jest.mock('../internal/principal');
+jest.mock('../complex');
 jest.mock('../math/real');
 
-beforeAll(() => {
-  mock(normalize).mockImplementation((value) => value);
-  mock(principal).mockImplementation((value) => value);
-});
-
 beforeEach(() => {
-  mock(real).mockReset();
+  mock(real).mockClear();
 });
 
-it('should not modify computed value if real value value is present', () => {
-  const expected = 3;
-  const z = new Complex(expected, 4, 0, 0, Component.CARTESIAN);
+test.each<[Component]>([
+  [Component.CARTESIAN],
+  [Component.CARTESIAN | Component.ABS],
+  [Component.CARTESIAN | Component.ARG],
+  [Component.REAL | Component.POLAR],
+])('should not modify computed value if real value is present', (testHas) => {
+  const expected = {} as number;
+  const z = new Complex(expected, _, _, _, testHas);
 
   const actual = sut(z);
 
   expect(real).not.toHaveBeenCalled();
   expect(z._real).toBe(expected);
-  expect(z._has).toBe(Component.CARTESIAN);
+  expect(z._has).toBe(testHas);
   expect(actual).toBe(expected);
 });
 
-it('should modify computed value if real value is not present', () => {
-  const abs = 2;
-  const arg = Math.PI / 3;
-  const expected = 1;
-  const z = new Complex(0, 0, abs, arg, Component.POLAR);
+test.each<[Component]>([
+  [Component.POLAR],
+  [Component.POLAR | Component.IMAG],
+])('should modify computed value if real value is not present', (testHas) => {
+  const testAbs = {} as number;
+  const testArg = {} as number;
+  const expected = {} as number;
+  const z = new Complex(_, _, testAbs, testArg, testHas);
 
   mock(real).mockReturnValueOnce(expected);
 
   const actual = sut(z);
 
-  expect(real).toHaveBeenCalledWith(abs, arg);
+  expect(real).toHaveBeenCalledWith(testAbs, testArg);
   expect(z._real).toBe(expected);
-  expect(z._has).toBe(Component.POLAR | Component.REAL);
+  expect(z._has).toBe(testHas | Component.REAL);
   expect(actual).toBe(expected);
 });

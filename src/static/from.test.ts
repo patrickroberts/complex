@@ -1,36 +1,35 @@
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
-import Component from '../internal/component';
 import cartesian from './cartesian';
 import sut from './from';
 
+jest.mock('../complex');
 jest.mock('./cartesian');
-
-beforeAll(() => {
-  mock(cartesian).mockImplementation((): any => ({}));
-});
 
 beforeEach(() => {
   mock(cartesian).mockClear();
 });
 
 it('should default second argument to 0', () => {
-  const actual = sut(Complex, 2);
+  const testReal = 3;
+  const actual = sut(Complex, testReal);
 
-  expect(cartesian).toHaveBeenCalledWith(Complex, 2, 0);
+  expect(cartesian).toHaveBeenCalledWith(Complex, testReal, 0);
   expect(cartesian).toHaveReturnedWith(actual);
 });
 
 it('should delegate to cartesian if first argument is a number', () => {
-  const actual = sut(Complex, 3, 4);
+  const testReal = 3;
+  const testImag = {} as number;
+  const actual = sut(Complex, testReal, testImag);
 
-  expect(cartesian).toHaveBeenCalledWith(Complex, 3, 4);
+  expect(cartesian).toHaveBeenCalledWith(Complex, testReal, testImag);
   expect(cartesian).toHaveReturnedWith(actual);
 });
 
-it('should delegate to Complex constructor with all components if real value is 0', () => {
-  const expected = new Complex(3, 4, 0, 0, Component.CARTESIAN);
+it('should return first argument if it is not a number', () => {
+  const expected = {} as Complex;
 
   const actual = sut(Complex, expected);
 

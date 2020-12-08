@@ -1,45 +1,48 @@
+import _ from '../__fixtures__/any/number';
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import Component from '../internal/component';
+import abs from '../math/abs';
+import arg from '../math/arg';
 import sut from './cartesian';
 
 jest.mock('../complex');
-
-const _ = expect.any(Number);
-
-beforeAll(() => {
-  mock(Complex).mockImplementation((): any => ({}));
-});
+jest.mock('../math/abs');
+jest.mock('../math/arg');
 
 beforeEach(() => {
   mock(Complex).mockClear();
+  mock(abs).mockClear();
+  mock(arg).mockClear();
 });
 
 test.each([
-  [3, 3, 0],
-  [-3, 3, Math.PI],
-])('should delegate to Complex constructor with all components if imaginary value is 0', (real, abs, arg) => {
-  const actual = sut(Complex, real, 0);
+  [0, 0],
+  [0, {} as number],
+  [{} as number, 0],
+])('should delegate to constructor with all components if either value is 0', (testReal, testImag) => {
+  const expectedAbs = {} as number;
+  const expectedArg = {} as number;
 
-  expect(Complex).toHaveBeenCalledWith(real, 0, abs, arg, Component.ALL);
+  mock(abs).mockReturnValueOnce(expectedAbs);
+  mock(arg).mockReturnValueOnce(expectedArg);
+
+  const actual = sut(Complex, testReal, testImag);
+
+  expect(abs).toHaveBeenCalledWith(testReal, testImag);
+  expect(arg).toHaveBeenCalledWith(testReal, testImag);
+  expect(Complex).toHaveBeenCalledWith(testReal, testImag, expectedAbs, expectedArg, Component.ALL);
   expect(Complex).toHaveReturnedWith(actual);
 });
 
-test.each([
-  [0, 0, 0],
-  [3, 3, 0.5 * Math.PI],
-  [-3, 3, -0.5 * Math.PI],
-])('should delegate to Complex constructor with all components if real value is 0', (imag, abs, arg) => {
-  const actual = sut(Complex, 0, imag);
+it('should delegate to constructor with cartesian components if neither value is 0', () => {
+  const testReal = {} as number;
+  const testImag = {} as number;
+  const actual = sut(Complex, testReal, testImag);
 
-  expect(Complex).toHaveBeenCalledWith(0, imag, abs, arg, Component.ALL);
-  expect(Complex).toHaveReturnedWith(actual);
-});
-
-it('should delegate to Complex constructor with cartesian components if neither value is 0', () => {
-  const actual = sut(Complex, 3, 4);
-
-  expect(Complex).toHaveBeenCalledWith(3, 4, _, _, Component.CARTESIAN);
+  expect(abs).not.toHaveBeenCalled();
+  expect(arg).not.toHaveBeenCalled();
+  expect(Complex).toHaveBeenCalledWith(testReal, testImag, _, _, Component.CARTESIAN);
   expect(Complex).toHaveReturnedWith(actual);
 });
