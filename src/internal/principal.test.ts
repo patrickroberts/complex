@@ -11,8 +11,8 @@ test.each([
   [-3 * Math.PI, Math.PI],
   [Math.PI + 4 * Number.EPSILON, -Math.PI + 4 * Number.EPSILON],
   [-Math.PI - 4 * Number.EPSILON, Math.PI - 4 * Number.EPSILON],
-])('should return principal argument', (testArg, expectedArg, numDigits = 14) => {
+])('should return principal argument', (testArg, expectedArg) => {
   const actualArg = sut(testArg);
 
-  expect(actualArg).toBeCloseTo(expectedArg, numDigits);
+  expect(actualArg).toBe(expectedArg);
 });
