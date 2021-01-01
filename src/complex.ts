@@ -1,5 +1,4 @@
 import Component from './internal/component';
-import normalize from './internal/normalize';
 import principal from './internal/principal';
 import _real from './accessors/real';
 import _imag from './accessors/imag';
@@ -34,9 +33,9 @@ export default class Complex {
 
   /** @internal */
   public constructor(real: number, imag: number, abs: number, arg: number, has: Component) {
-    this._real = normalize(real);
-    this._imag = normalize(imag);
-    this._abs = normalize(abs);
+    this._real = real;
+    this._imag = imag;
+    this._abs = abs;
     this._arg = principal(arg);
     this._has = has;
   }
@@ -67,42 +66,49 @@ export default class Complex {
 
   public static exp(z: Complex): Complex;
   public static exp(real: number, imag?: number): Complex;
+  public static exp(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public static exp(r: Complex | number, i = 0): Complex {
     return exp(Complex, from(Complex, r, i));
   }
 
   public static log(z: Complex): Complex;
   public static log(real: number, imag?: number): Complex;
+  public static log(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public static log(r: Complex | number, i = 0): Complex {
     return log(Complex, from(Complex, r, i));
   }
 
   public add(z: Complex): Complex;
   public add(real: number, imag?: number): Complex;
+  public add(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public add(r: Complex | number, i = 0): Complex {
     return add(Complex, this, from(Complex, r, i));
   }
 
   public subtract(z: Complex): Complex;
   public subtract(real: number, imag?: number): Complex;
+  public subtract(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public subtract(r: Complex | number, i = 0): Complex {
     return subtract(Complex, this, from(Complex, r, i));
   }
 
   public multiply(z: Complex): Complex;
   public multiply(real: number, imag?: number): Complex;
+  public multiply(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public multiply(r: Complex | number, i = 0): Complex {
     return multiply(Complex, this, from(Complex, r, i));
   }
 
   public divide(z: Complex): Complex;
   public divide(real: number, imag?: number): Complex;
+  public divide(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public divide(r: Complex | number, i = 0): Complex {
     return divide(Complex, this, from(Complex, r, i));
   }
 
   public pow(z: Complex): Complex;
   public pow(real: number, imag?: number): Complex;
+  public pow(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public pow(r: Complex | number, i = 0): Complex {
     return pow(Complex, this, from(Complex, r, i));
   }

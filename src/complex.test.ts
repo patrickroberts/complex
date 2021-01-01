@@ -3,7 +3,6 @@ import mock from './__fixtures__/mock';
 
 import Complex from './complex';
 import Component from './internal/component';
-import normalize from './internal/normalize';
 import principal from './internal/principal';
 import real from './accessors/real';
 import imag from './accessors/imag';
@@ -20,7 +19,6 @@ import multiply from './methods/multiply';
 import divide from './methods/divide';
 import pow from './methods/pow';
 
-jest.mock('./internal/normalize');
 jest.mock('./internal/principal');
 jest.mock('./accessors/real');
 jest.mock('./accessors/imag');
@@ -38,7 +36,6 @@ jest.mock('./methods/divide');
 jest.mock('./methods/pow');
 
 beforeEach(() => {
-  mock(normalize).mockClear();
   mock(principal).mockClear();
   mock(real).mockClear();
   mock(imag).mockClear();
@@ -57,16 +54,13 @@ beforeEach(() => {
 });
 
 describe('constructor', () => {
-  it('should normalize components', () => {
+  it('should initialize components', () => {
     const testReal = {} as number;
     const testImag = {} as number;
     const testAbs = {} as number;
 
     const actual = new Complex(testReal, testImag, testAbs, _, _);
 
-    expect(normalize).toHaveBeenCalledWith(testReal);
-    expect(normalize).toHaveBeenCalledWith(testImag);
-    expect(normalize).toHaveBeenCalledWith(testAbs);
     expect(actual._real).toBe(testReal);
     expect(actual._imag).toBe(testImag);
     expect(actual._abs).toBe(testAbs);
