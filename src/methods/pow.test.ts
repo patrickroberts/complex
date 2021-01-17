@@ -7,16 +7,16 @@ import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
-import multiply from './multiply';
-import divide from './divide';
+import mul from './mul';
+import div from './div';
 import sut from './pow';
 
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
 jest.mock('../accessors/abs');
 jest.mock('../accessors/arg');
-jest.mock('./multiply');
-jest.mock('./divide');
+jest.mock('./mul');
+jest.mock('./div');
 
 const ONE = expect.objectContaining({
   _real: 1, _imag: 0, _abs: 1, _arg: 0, _has: Component.ALL,
@@ -32,8 +32,8 @@ beforeEach(() => {
   mock(imag).mockClear();
   mock(abs).mockClear();
   mock(arg).mockClear();
-  mock(multiply).mockClear();
-  mock(divide).mockClear();
+  mock(mul).mockClear();
+  mock(div).mockClear();
 });
 
 it('should invert any base with an exponent of -1', () => {
@@ -41,7 +41,7 @@ it('should invert any base with an exponent of -1', () => {
   const rhs = new Complex(-1, 0, 0, 0, Component.CARTESIAN);
   const expected = {} as Complex;
 
-  mock(divide).mockReturnValueOnce(expected);
+  mock(div).mockReturnValueOnce(expected);
 
   const actual = sut(Complex, lhs, rhs);
 
@@ -49,7 +49,7 @@ it('should invert any base with an exponent of -1', () => {
   expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
-  expect(divide).toHaveBeenCalledWith(Complex, ONE, lhs);
+  expect(div).toHaveBeenCalledWith(Complex, ONE, lhs);
   expect(actual).toBe(expected);
 });
 
@@ -84,7 +84,7 @@ it('should square any base with an exponent of 2', () => {
   const rhs = new Complex(2, 0, _, _, Component.CARTESIAN);
   const expected = {} as Complex;
 
-  mock(multiply).mockReturnValueOnce(expected);
+  mock(mul).mockReturnValueOnce(expected);
 
   const actual = sut(Complex, lhs, rhs);
 
@@ -92,7 +92,7 @@ it('should square any base with an exponent of 2', () => {
   expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
-  expect(multiply).toHaveBeenCalledWith(Complex, lhs, lhs);
+  expect(mul).toHaveBeenCalledWith(Complex, lhs, lhs);
   expect(actual).toBe(expected);
 });
 

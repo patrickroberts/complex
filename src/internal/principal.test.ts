@@ -2,6 +2,7 @@ import sut from './principal';
 
 test.each([
   [0, 0],
+  [-0, -0],
   [4, 4 - 2 * Math.PI],
   [-2, -2],
   [-4, -4 + 2 * Math.PI],

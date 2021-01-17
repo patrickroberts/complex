@@ -4,15 +4,20 @@ import _real from './accessors/real';
 import _imag from './accessors/imag';
 import _abs from './accessors/abs';
 import _arg from './accessors/arg';
+import norm from './accessors/norm';
 import from from './static/from';
 import cartesian from './static/cartesian';
 import polar from './static/polar';
+import cbrt from './static/cbrt';
+import conj from './static/conj';
 import exp from './static/exp';
 import log from './static/log';
+import proj from './static/proj';
+import sqrt from './static/sqrt';
 import add from './methods/add';
-import subtract from './methods/subtract';
-import multiply from './methods/multiply';
-import divide from './methods/divide';
+import sub from './methods/sub';
+import mul from './methods/mul';
+import div from './methods/div';
 import pow from './methods/pow';
 
 export default class Complex {
@@ -56,6 +61,24 @@ export default class Complex {
     return _arg(this);
   }
 
+  public get norm(): number {
+    return norm(this);
+  }
+
+  public static readonly ZERO = cartesian(Complex, 0, 0);
+
+  public static readonly ONE = cartesian(Complex, 1, 0);
+
+  public static readonly I = cartesian(Complex, 0, 1);
+
+  public static readonly E = cartesian(Complex, Math.E, 0);
+
+  public static readonly PI = cartesian(Complex, Math.PI, 0);
+
+  public static readonly INFINITY = cartesian(Complex, Infinity, 0);
+
+  public static readonly NaN = new Complex(NaN, NaN, NaN, NaN, Component.ALL);
+
   public static cartesian(real: number, imag = 0): Complex {
     return cartesian(Complex, real, imag);
   }
@@ -64,18 +87,46 @@ export default class Complex {
     return polar(Complex, abs, arg);
   }
 
+  public static cbrt(z: Complex): Complex;
+  public static cbrt(real: number, imag?: number): Complex;
+  public static cbrt(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static cbrt(r: Complex | number, i = 0): Complex {
+    return cbrt(Complex, from(Complex, r, i));
+  }
+
+  public static conj(z: Complex): Complex;
+  public static conj(real: number, imag?: number): Complex;
+  public static conj(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static conj(r: Complex | number, i = 0): Complex {
+    return conj(Complex, from(Complex, r, i));
+  }
+
   public static exp(z: Complex): Complex;
   public static exp(real: number, imag?: number): Complex;
-  public static exp(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static exp(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
   public static exp(r: Complex | number, i = 0): Complex {
     return exp(Complex, from(Complex, r, i));
   }
 
   public static log(z: Complex): Complex;
   public static log(real: number, imag?: number): Complex;
-  public static log(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static log(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
   public static log(r: Complex | number, i = 0): Complex {
     return log(Complex, from(Complex, r, i));
+  }
+
+  public static proj(z: Complex): Complex;
+  public static proj(real: number, imag?: number): Complex;
+  public static proj(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static proj(r: Complex | number, i = 0): Complex {
+    return proj(Complex, from(Complex, r, i));
+  }
+
+  public static sqrt(z: Complex): Complex;
+  public static sqrt(real: number, imag?: number): Complex;
+  public static sqrt(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static sqrt(r: Complex | number, i = 0): Complex {
+    return sqrt(Complex, from(Complex, r, i));
   }
 
   public add(z: Complex): Complex;
@@ -85,25 +136,46 @@ export default class Complex {
     return add(Complex, this, from(Complex, r, i));
   }
 
+  public sub(z: Complex): Complex;
+  public sub(real: number, imag?: number): Complex;
+  public sub(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
+  public sub(r: Complex | number, i = 0): Complex {
+    return sub(Complex, this, from(Complex, r, i));
+  }
+
   public subtract(z: Complex): Complex;
   public subtract(real: number, imag?: number): Complex;
   public subtract(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public subtract(r: Complex | number, i = 0): Complex {
-    return subtract(Complex, this, from(Complex, r, i));
+    return sub(Complex, this, from(Complex, r, i));
+  }
+
+  public mul(z: Complex): Complex;
+  public mul(real: number, imag?: number): Complex;
+  public mul(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
+  public mul(r: Complex | number, i = 0): Complex {
+    return mul(Complex, this, from(Complex, r, i));
   }
 
   public multiply(z: Complex): Complex;
   public multiply(real: number, imag?: number): Complex;
   public multiply(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public multiply(r: Complex | number, i = 0): Complex {
-    return multiply(Complex, this, from(Complex, r, i));
+    return mul(Complex, this, from(Complex, r, i));
+  }
+
+  public div(z: Complex): Complex;
+  public div(real: number, imag?: number): Complex;
+  public div(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
+  public div(r: Complex | number, i = 0): Complex {
+    return div(Complex, this, from(Complex, r, i));
   }
 
   public divide(z: Complex): Complex;
   public divide(real: number, imag?: number): Complex;
   public divide(...rhs: [z: Complex] | [real: number, imag?: number]): Complex;
   public divide(r: Complex | number, i = 0): Complex {
-    return divide(Complex, this, from(Complex, r, i));
+    return div(Complex, this, from(Complex, r, i));
   }
 
   public pow(z: Complex): Complex;

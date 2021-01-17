@@ -8,15 +8,20 @@ import real from './accessors/real';
 import imag from './accessors/imag';
 import abs from './accessors/abs';
 import arg from './accessors/arg';
+import norm from './accessors/norm';
 import from from './static/from';
 import cartesian from './static/cartesian';
 import polar from './static/polar';
+import cbrt from './static/cbrt';
+import conj from './static/conj';
 import exp from './static/exp';
 import log from './static/log';
+import proj from './static/proj';
+import sqrt from './static/sqrt';
 import add from './methods/add';
-import subtract from './methods/subtract';
-import multiply from './methods/multiply';
-import divide from './methods/divide';
+import sub from './methods/sub';
+import mul from './methods/mul';
+import div from './methods/div';
 import pow from './methods/pow';
 
 jest.mock('./internal/principal');
@@ -24,15 +29,20 @@ jest.mock('./accessors/real');
 jest.mock('./accessors/imag');
 jest.mock('./accessors/abs');
 jest.mock('./accessors/arg');
+jest.mock('./accessors/norm');
 jest.mock('./static/from');
 jest.mock('./static/cartesian');
 jest.mock('./static/polar');
+jest.mock('./static/cbrt');
+jest.mock('./static/conj');
 jest.mock('./static/exp');
 jest.mock('./static/log');
+jest.mock('./static/proj');
+jest.mock('./static/sqrt');
 jest.mock('./methods/add');
-jest.mock('./methods/subtract');
-jest.mock('./methods/multiply');
-jest.mock('./methods/divide');
+jest.mock('./methods/sub');
+jest.mock('./methods/mul');
+jest.mock('./methods/div');
 jest.mock('./methods/pow');
 
 beforeEach(() => {
@@ -41,15 +51,20 @@ beforeEach(() => {
   mock(imag).mockClear();
   mock(abs).mockClear();
   mock(arg).mockClear();
+  mock(norm).mockClear();
   mock(from).mockClear();
   mock(cartesian).mockClear();
   mock(polar).mockClear();
+  mock(cbrt).mockClear();
+  mock(conj).mockClear();
   mock(exp).mockClear();
   mock(log).mockClear();
+  mock(proj).mockClear();
+  mock(sqrt).mockClear();
   mock(add).mockClear();
-  mock(subtract).mockClear();
-  mock(multiply).mockClear();
-  mock(divide).mockClear();
+  mock(sub).mockClear();
+  mock(mul).mockClear();
+  mock(div).mockClear();
   mock(pow).mockClear();
 });
 
@@ -87,11 +102,15 @@ describe('constructor', () => {
   });
 });
 
-describe.each<['real' | 'imag' | 'abs' | 'arg', typeof real]>([
+describe.each<[
+  'real' | 'imag' | 'abs' | 'arg' | 'norm',
+  typeof real,
+]>([
   ['real', real],
   ['imag', imag],
   ['abs', abs],
   ['arg', arg],
+  ['norm', norm],
 ])('accessors', (accessor, impl) => {
   describe(`Complex.prototype.${accessor}`, () => {
     it(`should delegate to ${accessor}`, () => {
@@ -163,12 +182,19 @@ describe('Complex.polar', () => {
   });
 });
 
-describe.each<['exp' | 'log', typeof exp]>([
+describe.each<[
+  'cbrt' | 'conj' | 'exp' | 'log' | 'proj' | 'sqrt',
+  typeof cbrt,
+]>([
+  ['cbrt', cbrt],
+  ['conj', conj],
   ['exp', exp],
   ['log', log],
+  ['proj', proj],
+  ['sqrt', sqrt],
 ])('static methods', (method, impl) => {
   describe(`Complex.${method}`, () => {
-    it(`should delegate to ${method} with Complex value`, () => {
+    it(`should delegate to ${impl.name} with Complex value`, () => {
       const z = {} as Complex;
       const expected = {} as Complex;
 
@@ -182,7 +208,7 @@ describe.each<['exp' | 'log', typeof exp]>([
       expect(actual).toBe(expected);
     });
 
-    it(`should delegate to ${method} with real and imaginary values`, () => {
+    it(`should delegate to ${impl.name} with real and imaginary values`, () => {
       const testReal = {} as number;
       const testImag = {} as number;
       const z = {} as Complex;
@@ -200,15 +226,21 @@ describe.each<['exp' | 'log', typeof exp]>([
   });
 });
 
-describe.each<['add' | 'subtract' | 'multiply' | 'divide' | 'pow', typeof add]>([
+describe.each<[
+  'add' | 'sub' | 'subtract' | 'mul' | 'multiply' | 'div' | 'divide' | 'pow',
+  typeof add,
+]>([
   ['add', add],
-  ['subtract', subtract],
-  ['multiply', multiply],
-  ['divide', divide],
+  ['sub', sub],
+  ['subtract', sub],
+  ['mul', mul],
+  ['multiply', mul],
+  ['div', div],
+  ['divide', div],
   ['pow', pow],
 ])('methods', (method, impl) => {
   describe(`Complex.prototype.${method}`, () => {
-    it(`should delegate to ${method} with Complex value`, () => {
+    it(`should delegate to ${impl.name} with Complex value`, () => {
       const lhs = new Complex(_, _, _, _, _);
       const rhs = {} as Complex;
       const expected = {} as Complex;
@@ -223,7 +255,7 @@ describe.each<['add' | 'subtract' | 'multiply' | 'divide' | 'pow', typeof add]>(
       expect(actual).toBe(expected);
     });
 
-    it(`should delegate to ${method} with real and imaginary values`, () => {
+    it(`should delegate to ${impl.name} with real and imaginary values`, () => {
       const lhs = new Complex(_, _, _, _, _);
       const testReal = {} as number;
       const testImag = {} as number;

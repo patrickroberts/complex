@@ -9,7 +9,7 @@ import abs from '../accessors/abs';
 import arg from '../accessors/arg';
 import cartesian from '../static/cartesian';
 import polar from '../static/polar';
-import sut from './divide';
+import sut from './div';
 
 jest.mock('../complex');
 jest.mock('../accessors/real');

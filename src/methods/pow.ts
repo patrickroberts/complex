@@ -1,12 +1,11 @@
 import Complex from '../complex';
-import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
 import polar from '../static/polar';
-import multiply from './multiply';
-import divide from './divide';
+import mul from './mul';
+import div from './div';
 
 export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
   const c = real(rhs);
@@ -14,10 +13,10 @@ export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
 
   if (d === 0) {
     switch (c) {
-      case -1: return divide(Ctor, new Ctor(1, 0, 1, 0, Component.ALL), lhs);
-      case 0: return new Ctor(1, 0, 1, 0, Component.ALL);
+      case -1: return div(Ctor, Ctor.ONE, lhs);
+      case 0: return Ctor.ONE;
       case 1: return lhs;
-      case 2: return multiply(Ctor, lhs, lhs);
+      case 2: return mul(Ctor, lhs, lhs);
       default: break;
     }
   }
