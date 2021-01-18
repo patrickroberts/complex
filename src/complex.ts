@@ -65,17 +65,17 @@ export default class Complex {
     return norm(this);
   }
 
-  public static readonly ZERO = cartesian(Complex, 0, 0);
+  public static readonly ZERO = new Complex(0, 0, 0, 0, Component.ALL);
 
-  public static readonly ONE = cartesian(Complex, 1, 0);
+  public static readonly ONE = new Complex(1, 0, 1, 0, Component.ALL);
 
-  public static readonly I = cartesian(Complex, 0, 1);
+  public static readonly I = new Complex(0, 1, 1, Math.PI / 2, Component.ALL);
 
-  public static readonly E = cartesian(Complex, Math.E, 0);
+  public static readonly E = new Complex(Math.E, 0, Math.E, 0, Component.ALL);
 
-  public static readonly PI = cartesian(Complex, Math.PI, 0);
+  public static readonly PI = new Complex(Math.PI, 0, Math.PI, 0, Component.ALL);
 
-  public static readonly INFINITY = cartesian(Complex, Infinity, 0);
+  public static readonly INFINITY = new Complex(Infinity, 0, Infinity, 0, Component.ALL);
 
   public static readonly NaN = new Complex(NaN, NaN, NaN, NaN, Component.ALL);
 

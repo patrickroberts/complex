@@ -18,10 +18,6 @@ jest.mock('../accessors/arg');
 jest.mock('./mul');
 jest.mock('./div');
 
-const ONE = expect.objectContaining({
-  _real: 1, _imag: 0, _abs: 1, _arg: 0, _has: Component.ALL,
-});
-
 beforeAll(() => {
   mock(abs).mockImplementation((z) => Math.hypot(z._real, z._imag));
   mock(arg).mockImplementation((z) => Math.atan2(z._imag, z._real));
@@ -49,7 +45,7 @@ it('should invert any base with an exponent of -1', () => {
   expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
-  expect(div).toHaveBeenCalledWith(Complex, ONE, lhs);
+  expect(div).toHaveBeenCalledWith(Complex, Complex.ONE, lhs);
   expect(actual).toBe(expected);
 });
 
@@ -63,7 +59,7 @@ it('should return 1 for any base with an exponent of 0', () => {
   expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
-  expect(actual).toEqual(ONE);
+  expect(actual).toEqual(Complex.ONE);
 });
 
 it('should return any base with an exponent of 1', () => {

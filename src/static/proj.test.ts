@@ -68,11 +68,11 @@ describe.each(finiteCases)('finite component', (finite: number, finiteSign: numb
     const shouldComputeSignedRealInfinity = (
       real: number, imag: number, abs: number, arg: number, has: Component,
     ) => {
-      const expected = new Complex(real, imag, abs, arg, has);
+      const z = new Complex(real, imag, abs, arg, has);
 
       mock(Complex).mockClear();
 
-      const actual = sut(Complex, expected);
+      const actual = sut(Complex, z);
 
       expect(actual._real).toBe(Infinity);
       expect(actual._imag).toBe(expectedSign);

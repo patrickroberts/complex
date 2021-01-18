@@ -15,3 +15,12 @@ test.each([
 
   expect(actualImag).toBeCloseTo(expectedImag, numDigits);
 });
+
+test.each([
+  [Infinity, 0],
+  [-Infinity, 0],
+])('should return NaN for Infinity and 0', (testAbs, testArg) => {
+  const actualImag = sut(testAbs, testArg);
+
+  expect(actualImag).toBe(NaN);
+});

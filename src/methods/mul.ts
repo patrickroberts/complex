@@ -11,11 +11,12 @@ export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
   const have = lhs._has & rhs._has;
 
   if (!(have & Component.POLAR) && (have & Component.CARTESIAN)) {
-    return cartesian(
-      Ctor,
-      real(lhs) * real(rhs) - imag(lhs) * imag(rhs),
-      lhs._real * rhs._imag + lhs._imag * rhs._real,
-    );
+    const a = real(lhs);
+    const b = imag(lhs);
+    const c = real(rhs);
+    const d = imag(rhs);
+
+    return cartesian(Ctor, a * c - b * d, a * d + b * c);
   }
 
   return polar(Ctor, abs(lhs) * abs(rhs), arg(lhs) + arg(rhs));
