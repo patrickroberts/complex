@@ -18,7 +18,7 @@
     "test": "jest",
     "build": "rollup --config --environment NODE_ENV:production",
     "rebuild": "npm run clean:build && npm run build",
-    "docs": "npm run clean:docs && typedoc src/complex.ts",
+    "docs": "npm run clean:docs && typedoc src/docs.ts",
     "watch:test": "npm test -- --watch",
     "watch:build": "npm run build -- --environment NODE_ENV:development --watch",
     "watch": "concurrently 'npm:watch:*'",
