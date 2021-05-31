@@ -16,7 +16,6 @@ export default [
   {
     input,
     external: [
-      ...keys(pkg.dependencies),
       ...keys(pkg.peerDependencies),
     ],
     output: [
@@ -31,37 +30,15 @@ export default [
         format: 'esm',
         sourcemap: production,
       },
+      {
+        file: pkg.browser,
+        format: 'umd',
+        name,
+        sourcemap: production,
+      },
     ],
     plugins: [
       resolve(),
-      commonjs(),
-      typescript({
-        transpiler: 'babel',
-        browserslist,
-      }),
-      production && terser({
-        output: {
-          comments: false,
-        },
-      }),
-    ],
-    watch: {
-      clearScreen: false,
-    },
-  },
-  {
-    input,
-    external: keys(pkg.peerDependencies),
-    output: {
-      file: pkg.browser,
-      format: 'umd',
-      name,
-      sourcemap: production,
-    },
-    plugins: [
-      resolve({
-        browser: true,
-      }),
       commonjs(),
       typescript({
         transpiler: 'babel',

@@ -14,14 +14,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
       - name: Install and Docs
         run: |
           npm ci
+          npm run clean
           npm test -- --ci
           bash <(curl -s https://codecov.io/bash)
           npm run docs
-          cp -r assets docs/assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy

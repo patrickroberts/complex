@@ -3,10 +3,10 @@ import Constructible from './constructible';
 
 type Mock<T extends Callable | Constructible> =
   T extends Callable ?
-  jest.Mock<ReturnType<T>, Parameters<T>> :
-  T extends Constructible ?
-  jest.Mock<InstanceType<T>, ConstructorParameters<T>> :
-  never;
+    jest.Mock<ReturnType<T>, Parameters<T>> :
+    T extends Constructible ?
+      jest.Mock<InstanceType<T>, ConstructorParameters<T>> :
+      never;
 
 export { Mock };
 

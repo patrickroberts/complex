@@ -1,6 +1,8 @@
 {
+  "allReflectionsHaveOwnDocument": true,
   "disableOutputCheck": true,
-  "hideProjectName": true,
+  "name": "complex-js",
   "out": "docs",
+  "preserveWatchOutput": true,
   "sourcefile-url-prefix": "https://github.com/patrickroberts/complex/blob/master/src/"
 }

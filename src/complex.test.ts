@@ -12,12 +12,24 @@ import norm from './accessors/norm';
 import from from './static/from';
 import cartesian from './static/cartesian';
 import polar from './static/polar';
+import acos from './static/acos';
+import acosh from './static/acosh';
+import asin from './static/asin';
+import asinh from './static/asinh';
+import atan from './static/atan';
+import atanh from './static/atanh';
 import cbrt from './static/cbrt';
 import conj from './static/conj';
+import cos from './static/cos';
+import cosh from './static/cosh';
 import exp from './static/exp';
 import log from './static/log';
 import proj from './static/proj';
+import sin from './static/sin';
+import sinh from './static/sinh';
 import sqrt from './static/sqrt';
+import tan from './static/tan';
+import tanh from './static/tanh';
 import add from './methods/add';
 import sub from './methods/sub';
 import mul from './methods/mul';
@@ -33,12 +45,24 @@ jest.mock('./accessors/norm');
 jest.mock('./static/from');
 jest.mock('./static/cartesian');
 jest.mock('./static/polar');
+jest.mock('./static/acos');
+jest.mock('./static/acosh');
+jest.mock('./static/asin');
+jest.mock('./static/asinh');
+jest.mock('./static/atan');
+jest.mock('./static/atanh');
 jest.mock('./static/cbrt');
 jest.mock('./static/conj');
+jest.mock('./static/cos');
+jest.mock('./static/cosh');
 jest.mock('./static/exp');
 jest.mock('./static/log');
 jest.mock('./static/proj');
+jest.mock('./static/sin');
+jest.mock('./static/sinh');
 jest.mock('./static/sqrt');
+jest.mock('./static/tan');
+jest.mock('./static/tanh');
 jest.mock('./methods/add');
 jest.mock('./methods/sub');
 jest.mock('./methods/mul');
@@ -55,12 +79,24 @@ beforeEach(() => {
   mock(from).mockClear();
   mock(cartesian).mockClear();
   mock(polar).mockClear();
+  mock(acos).mockClear();
+  mock(acosh).mockClear();
+  mock(asin).mockClear();
+  mock(asinh).mockClear();
+  mock(atan).mockClear();
+  mock(atanh).mockClear();
   mock(cbrt).mockClear();
   mock(conj).mockClear();
+  mock(cos).mockClear();
+  mock(cosh).mockClear();
   mock(exp).mockClear();
   mock(log).mockClear();
   mock(proj).mockClear();
+  mock(sin).mockClear();
+  mock(sinh).mockClear();
   mock(sqrt).mockClear();
+  mock(tan).mockClear();
+  mock(tanh).mockClear();
   mock(add).mockClear();
   mock(sub).mockClear();
   mock(mul).mockClear();
@@ -183,15 +219,28 @@ describe('Complex.polar', () => {
 });
 
 describe.each<[
-  'cbrt' | 'conj' | 'exp' | 'log' | 'proj' | 'sqrt',
+  'acos' | 'acosh' | 'asin' | 'asinh' | 'atan' | 'atanh' | 'cbrt' | 'conj' | 'cos' |
+  'cosh' | 'exp' | 'log' | 'proj' | 'sin' | 'sinh' | 'sqrt' | 'tan' | 'tanh',
   typeof cbrt,
 ]>([
+  ['acos', acos],
+  ['acosh', acosh],
+  ['asin', asin],
+  ['asinh', asinh],
+  ['atan', atan],
+  ['atanh', atanh],
   ['cbrt', cbrt],
   ['conj', conj],
+  ['cos', cos],
+  ['cosh', cosh],
   ['exp', exp],
   ['log', log],
   ['proj', proj],
+  ['sin', sin],
+  ['sinh', sinh],
   ['sqrt', sqrt],
+  ['tan', tan],
+  ['tanh', tanh],
 ])('static methods', (method, impl) => {
   describe(`Complex.${method}`, () => {
     it(`should delegate to ${impl.name} with Complex value`, () => {

@@ -1,5 +1,4 @@
 coverage/
-docs/**/*
-!docs/_config.yml
+docs/**/*.md
 dst/
 node_modules/
