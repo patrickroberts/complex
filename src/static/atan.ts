@@ -9,7 +9,7 @@ export default (Ctor: typeof Complex, z: Complex): Complex => {
 
   return mul(Ctor, Ctor.I1_2, sub(
     Ctor,
-    log(Ctor, sub(Ctor, Ctor.ONE, iz)),
-    log(Ctor, add(Ctor, Ctor.ONE, iz)),
+    log(Ctor, sub(Ctor, Ctor[1], iz)),
+    log(Ctor, add(Ctor, Ctor[1], iz)),
   ));
 };

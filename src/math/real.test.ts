@@ -1,3 +1,5 @@
+import precision from '../__fixtures__/precision';
+
 import sut from './real';
 
 test.each([
@@ -9,9 +11,9 @@ test.each([
   [1, Math.PI * (2 / 3), -0.5],
   [1, Math.PI * -(1 / 3), 0.5],
   [1, Math.PI * -(2 / 3), -0.5],
-  [1e307, Math.PI * (1 / 3), 0.5e307, -293],
-])('should return real value', (testAbs, testArg, expectedReal, numDigits = 14) => {
+  [1e307, Math.PI * (1 / 3), 0.5e307],
+])('should return real value', (testAbs, testArg, expectedReal) => {
   const actualReal = sut(testAbs, testArg);
 
-  expect(actualReal).toBeCloseTo(expectedReal, numDigits);
+  expect(actualReal).toBeCloseTo(expectedReal, precision(expectedReal));
 });

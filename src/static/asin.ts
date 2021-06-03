@@ -11,7 +11,7 @@ export default (Ctor: typeof Complex, z: Complex): Complex => (
     Ctor.NEGATIVE_I,
     log(Ctor, add(
       Ctor,
-      sqrt(Ctor, sub(Ctor, Ctor.ONE, mul(Ctor, z, z))),
+      sqrt(Ctor, sub(Ctor, Ctor[1], mul(Ctor, z, z))),
       mul(Ctor, Ctor.I, z),
     )),
   )

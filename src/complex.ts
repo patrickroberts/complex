@@ -77,11 +77,14 @@ export default class Complex {
     return norm(this);
   }
 
+  public static readonly 0 =
+  new Complex(0, 0, 0, 0, Component.ALL);
+
+  public static readonly 1 =
+  new Complex(1, 0, 1, 0, Component.ALL);
+
   public static readonly E =
   new Complex(Math.E, 0, Math.E, 0, Component.ALL);
-
-  public static readonly EPSILON =
-  new Complex(Number.EPSILON, 0, Number.EPSILON, 0, Component.ALL);
 
   public static readonly I =
   new Complex(0, 1, 1, Math.PI / 2, Component.ALL);
@@ -98,17 +101,8 @@ export default class Complex {
   public static readonly LOG2E =
   new Complex(Math.LOG2E, 0, Math.LOG2E, 0, Component.ALL);
 
-  public static readonly NaN =
-  new Complex(NaN, NaN, NaN, NaN, Component.ALL);
-
-  public static readonly NEGATIVE_INFINITY =
-  new Complex(Number.NEGATIVE_INFINITY, 0, Number.POSITIVE_INFINITY, Math.PI, Component.ALL);
-
   public static readonly PI =
   new Complex(Math.PI, 0, Math.PI, 0, Component.ALL);
-
-  public static readonly POSITIVE_INFINITY =
-  new Complex(Number.POSITIVE_INFINITY, 0, Number.POSITIVE_INFINITY, 0, Component.ALL);
 
   public static readonly SQRT1_2 =
   new Complex(Math.SQRT1_2, 0, Math.SQRT1_2, 0, Component.ALL);
@@ -117,11 +111,7 @@ export default class Complex {
   new Complex(Math.SQRT2, 0, Math.SQRT2, 0, Component.ALL);
 
   /** @internal */
-  public static readonly ONE =
-  new Complex(1, 0, 1, 0, Component.ALL);
-
-  /** @internal */
-  public static readonly ONE1_2 =
+  public static readonly '1_2' =
   new Complex(0.5, 0, 0.5, 0, Component.ALL);
 
   /** @internal */
@@ -146,126 +136,126 @@ export default class Complex {
 
   public static acos(z: Complex): Complex;
   public static acos(real: number, imag?: number): Complex;
-  public static acos(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static acos(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static acos(r: Complex | number, i = 0): Complex {
     return acos(Complex, from(Complex, r, i));
   }
 
   public static acosh(z: Complex): Complex;
   public static acosh(real: number, imag?: number): Complex;
-  public static acosh(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static acosh(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static acosh(r: Complex | number, i = 0): Complex {
     return acosh(Complex, from(Complex, r, i));
   }
 
   public static asin(z: Complex): Complex;
   public static asin(real: number, imag?: number): Complex;
-  public static asin(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static asin(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static asin(r: Complex | number, i = 0): Complex {
     return asin(Complex, from(Complex, r, i));
   }
 
   public static asinh(z: Complex): Complex;
   public static asinh(real: number, imag?: number): Complex;
-  public static asinh(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static asinh(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static asinh(r: Complex | number, i = 0): Complex {
     return asinh(Complex, from(Complex, r, i));
   }
 
   public static atan(z: Complex): Complex;
   public static atan(real: number, imag?: number): Complex;
-  public static atan(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static atan(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static atan(r: Complex | number, i = 0): Complex {
     return atan(Complex, from(Complex, r, i));
   }
 
   public static atanh(z: Complex): Complex;
   public static atanh(real: number, imag?: number): Complex;
-  public static atanh(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static atanh(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static atanh(r: Complex | number, i = 0): Complex {
     return atanh(Complex, from(Complex, r, i));
   }
 
   public static cbrt(z: Complex): Complex;
   public static cbrt(real: number, imag?: number): Complex;
-  public static cbrt(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static cbrt(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static cbrt(r: Complex | number, i = 0): Complex {
     return cbrt(Complex, from(Complex, r, i));
   }
 
   public static conj(z: Complex): Complex;
   public static conj(real: number, imag?: number): Complex;
-  public static conj(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static conj(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static conj(r: Complex | number, i = 0): Complex {
     return conj(Complex, from(Complex, r, i));
   }
 
   public static cos(z: Complex): Complex;
   public static cos(real: number, imag?: number): Complex;
-  public static cos(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static cos(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static cos(r: Complex | number, i = 0): Complex {
     return cos(Complex, from(Complex, r, i));
   }
 
   public static cosh(z: Complex): Complex;
   public static cosh(real: number, imag?: number): Complex;
-  public static cosh(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static cosh(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static cosh(r: Complex | number, i = 0): Complex {
     return cosh(Complex, from(Complex, r, i));
   }
 
   public static exp(z: Complex): Complex;
   public static exp(real: number, imag?: number): Complex;
-  public static exp(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static exp(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static exp(r: Complex | number, i = 0): Complex {
     return exp(Complex, from(Complex, r, i));
   }
 
   public static log(z: Complex): Complex;
   public static log(real: number, imag?: number): Complex;
-  public static log(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static log(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static log(r: Complex | number, i = 0): Complex {
     return log(Complex, from(Complex, r, i));
   }
 
   public static proj(z: Complex): Complex;
   public static proj(real: number, imag?: number): Complex;
-  public static proj(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static proj(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static proj(r: Complex | number, i = 0): Complex {
     return proj(Complex, from(Complex, r, i));
   }
 
   public static sin(z: Complex): Complex;
   public static sin(real: number, imag?: number): Complex;
-  public static sin(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static sin(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static sin(r: Complex | number, i = 0): Complex {
     return sin(Complex, from(Complex, r, i));
   }
 
   public static sinh(z: Complex): Complex;
   public static sinh(real: number, imag?: number): Complex;
-  public static sinh(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static sinh(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static sinh(r: Complex | number, i = 0): Complex {
     return sinh(Complex, from(Complex, r, i));
   }
 
   public static sqrt(z: Complex): Complex;
   public static sqrt(real: number, imag?: number): Complex;
-  public static sqrt(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static sqrt(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static sqrt(r: Complex | number, i = 0): Complex {
     return sqrt(Complex, from(Complex, r, i));
   }
 
   public static tan(z: Complex): Complex;
   public static tan(real: number, imag?: number): Complex;
-  public static tan(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static tan(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static tan(r: Complex | number, i = 0): Complex {
     return tan(Complex, from(Complex, r, i));
   }
 
   public static tanh(z: Complex): Complex;
   public static tanh(real: number, imag?: number): Complex;
-  public static tanh(...arg: [z: Complex] | [real: number, imag?: number]): Complex;
+  public static tanh(...args: [z: Complex] | [real: number, imag?: number]): Complex;
   public static tanh(r: Complex | number, i = 0): Complex {
     return tanh(Complex, from(Complex, r, i));
   }

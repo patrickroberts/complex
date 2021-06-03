@@ -1,3 +1,5 @@
+import precision from '../__fixtures__/precision';
+
 import sut from './imag';
 
 test.each([
@@ -9,11 +11,11 @@ test.each([
   [1, Math.PI * (5 / 6), 0.5],
   [1, Math.PI * -(1 / 6), -0.5],
   [1, Math.PI * -(5 / 6), -0.5],
-  [1e307, Math.PI * (1 / 6), 0.5e307, -293],
-])('should return imaginary value', (testAbs, testArg, expectedImag, numDigits = 14) => {
+  [1e307, Math.PI * (1 / 6), 0.5e307],
+])('should return imaginary value', (testAbs, testArg, expectedImag) => {
   const actualImag = sut(testAbs, testArg);
 
-  expect(actualImag).toBeCloseTo(expectedImag, numDigits);
+  expect(actualImag).toBeCloseTo(expectedImag, precision(expectedImag));
 });
 
 test.each([

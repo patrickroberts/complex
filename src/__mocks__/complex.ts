@@ -1,7 +1,10 @@
 import Component from '../internal/component';
+import principal from '../internal/principal';
+
+jest.mock('../internal/principal');
 
 export default jest.fn((
-  _real: number, _imag: number, _abs: number, _arg: number, _has: Component,
+  real: number, imag: number, abs: number, arg: number, has: Component,
 ) => ({
-  _real, _imag, _abs, _arg, _has,
+  _real: real, _imag: imag, _abs: abs, _arg: principal(arg), _has: has,
 }));

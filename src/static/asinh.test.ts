@@ -29,7 +29,7 @@ it('should delegate implementation to alternate form', () => {
   const actual = sut(Complex, z);
 
   expect(mul).toBeCalledWith(Complex, z, z);
-  expect(add).toBeCalledWith(Complex, mulZZ, Complex.ONE);
+  expect(add).toBeCalledWith(Complex, mulZZ, Complex[1]);
   expect(sqrt).toBeCalledWith(Complex, addMulZZOne);
   expect(add).toBeCalledWith(Complex, sqrtAddMulZZOne, z);
   expect(log).toBeCalledWith(Complex, addSqrtAddMulZZOneZ);

@@ -13,8 +13,8 @@ export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
 
   if (d === 0) {
     switch (c) {
-      case -1: return div(Ctor, Ctor.ONE, lhs);
-      case 0: return Ctor.ONE;
+      case -1: return div(Ctor, Ctor[1], lhs);
+      case 0: return Ctor[1];
       case 1: return lhs;
       case 2: return mul(Ctor, lhs, lhs);
       default: break;

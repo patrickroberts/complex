@@ -11,8 +11,8 @@ export default (Ctor: typeof Complex, z: Complex): Complex => (
     z,
     mul(
       Ctor,
-      sqrt(Ctor, sub(Ctor, z, Ctor.ONE)),
-      sqrt(Ctor, add(Ctor, z, Ctor.ONE)),
+      sqrt(Ctor, sub(Ctor, z, Ctor[1])),
+      sqrt(Ctor, add(Ctor, z, Ctor[1])),
     ),
   ))
 );

@@ -10,7 +10,7 @@ export default (Ctor: typeof Complex, z: Complex): Complex => (
     sqrt(Ctor, add(
       Ctor,
       mul(Ctor, z, z),
-      Ctor.ONE,
+      Ctor[1],
     )),
     z,
   ))

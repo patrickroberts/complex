@@ -1,11 +1,11 @@
 import Complex from '../complex';
 import Component from '../internal/component';
 
-function inf(Ctor: typeof Complex, x: number): Complex {
+const inf = (Ctor: typeof Complex, x: number): Complex => {
   const sign = (x || 1 / x) < 0 ? -0 : 0;
 
   return new Ctor(Infinity, sign, Infinity, sign, Component.ALL);
-}
+};
 
 export default (Ctor: typeof Complex, z: Complex): Complex => {
   if (

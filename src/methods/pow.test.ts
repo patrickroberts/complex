@@ -1,5 +1,6 @@
 import _ from '../__fixtures__/any/number';
 import mock from '../__fixtures__/mock';
+import precision from '../__fixtures__/precision';
 
 import Complex from '../complex';
 import Component from '../internal/component';
@@ -45,7 +46,7 @@ it('should invert any base with an exponent of -1', () => {
   expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
-  expect(div).toHaveBeenCalledWith(Complex, Complex.ONE, lhs);
+  expect(div).toHaveBeenCalledWith(Complex, Complex[1], lhs);
   expect(actual).toBe(expected);
 });
 
@@ -59,7 +60,7 @@ it('should return 1 for any base with an exponent of 0', () => {
   expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
-  expect(actual).toEqual(Complex.ONE);
+  expect(actual).toEqual(Complex[1]);
 });
 
 it('should return any base with an exponent of 1', () => {
@@ -93,10 +94,10 @@ it('should square any base with an exponent of 2', () => {
 });
 
 test.each([
-  [[1, -2], [3, 0], [11.180339887498949, 2.961739153797315], [13, 14]],
-  [[1, 2], [3, 4], [0.13339535015395904, 0.2571366710708858], [15, 14]],
-  [[-1, 2], [3, -4], [38251.29182297142, 2.8844559825189076], [9, 14]],
-])('should compute polar components', (lhs, rhs, expected, numDigits) => {
+  [[1, -2], [3, 0], [11.180339887498949, 2.961739153797315]],
+  [[1, 2], [3, 4], [0.13339535015395904, 0.2571366710708858]],
+  [[-1, 2], [3, -4], [38251.29182297142, 2.8844559825189076]],
+])('should compute polar components', (lhs, rhs, expected) => {
   const a = new Complex(lhs[0], lhs[1], _, _, Component.CARTESIAN);
   const b = new Complex(rhs[0], rhs[1], _, _, Component.CARTESIAN);
 
@@ -106,6 +107,6 @@ test.each([
   expect(imag).toHaveBeenCalledWith(b);
   expect(abs).toHaveBeenCalledWith(a);
   expect(arg).toHaveBeenCalledWith(a);
-  expect(actual._abs).toBeCloseTo(expected[0], numDigits[0]);
-  expect(actual._arg).toBeCloseTo(expected[1], numDigits[1]);
+  expect(actual._abs).toBeCloseTo(expected[0], precision(expected[0]));
+  expect(actual._arg).toBeCloseTo(expected[1], precision(expected[1]));
 });
