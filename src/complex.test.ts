@@ -81,19 +81,31 @@ describe.each<['real' | 'imag' | 'abs' | 'arg' | 'norm', typeof real]>([
   ['abs', abs],
   ['arg', arg],
   ['norm', norm],
-])('accessors', (accessor, impl) => {
-  describe(`Complex.prototype.${accessor}`, () => {
-    it(`should delegate to ${accessor}`, () => {
+])('accessors', (name, impl) => {
+  describe(`Complex.prototype.${name}`, () => {
+    it(`should delegate to ${name}`, () => {
       const expected = {} as number;
       const z = new Complex(_, _, _, _, _);
 
       expect(impl).not.toHaveBeenCalled();
       mock(impl).mockReturnValueOnce(expected);
 
-      const actual = z[accessor];
+      const actual = z[name];
 
       expect(impl).toHaveBeenCalledWith(z);
       expect(actual).toBe(expected);
+    });
+
+    it('should throw TypeError if called on incompatible receiver', () => {
+      const get = Object.getOwnPropertyDescriptor(Complex.prototype, name)!.get!;
+      const z = {} as Complex;
+
+      expect(() => get.call(z)).toThrow(
+        new TypeError(
+          `Method get Complex.prototype.${name} called on incompatible receiver`,
+        ),
+      );
+      expect(impl).not.toHaveBeenCalled();
     });
   });
 });
@@ -104,19 +116,32 @@ describe.each<['add' | 'sub' | 'mul' | 'div' | 'pow', typeof add]>([
   ['mul', mul],
   ['div', div],
   ['pow', pow],
-])('methods', (method, impl) => {
-  describe(`Complex.prototype.${method}`, () => {
-    it(`should delegate to ${impl.name}`, () => {
+])('methods', (name, impl) => {
+  describe(`Complex.prototype.${name}`, () => {
+    it(`should delegate to ${name}`, () => {
       const lhs = new Complex(_, _, _, _, _);
       const rhs = {} as Complex;
       const expected = {} as Complex;
 
       mock(impl).mockReturnValueOnce(expected);
 
-      const actual = lhs[method](rhs);
+      const actual = lhs[name](rhs);
 
       expect(impl).toHaveBeenCalledWith(Complex, lhs, rhs);
       expect(actual).toBe(expected);
+    });
+
+    it('should throw TypeError if called on incompatible receiver', () => {
+      const method = Complex.prototype[name];
+      const lhs = {} as Complex;
+      const rhs = {} as Complex;
+
+      expect(() => method.call(lhs, rhs)).toThrow(
+        new TypeError(
+          `Method Complex.prototype.${name} called on incompatible receiver`,
+        ),
+      );
+      expect(impl).not.toHaveBeenCalled();
     });
   });
 });

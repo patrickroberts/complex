@@ -11,6 +11,12 @@ import mul from './methods/mul';
 import div from './methods/div';
 import pow from './methods/pow';
 
+const invariant = (z: Complex, Ctor: typeof Complex, method: string) => {
+  if (!(z instanceof Ctor)) {
+    throw new TypeError(`Method ${method} called on incompatible receiver`);
+  }
+};
+
 export default class Complex {
   /** @internal */
   public _real: number;
@@ -37,42 +43,52 @@ export default class Complex {
   }
 
   public get real(): number {
+    invariant(this, Complex, 'get Complex.prototype.real');
     return real(this);
   }
 
   public get imag(): number {
+    invariant(this, Complex, 'get Complex.prototype.imag');
     return imag(this);
   }
 
   public get abs(): number {
+    invariant(this, Complex, 'get Complex.prototype.abs');
     return abs(this);
   }
 
   public get arg(): number {
+    invariant(this, Complex, 'get Complex.prototype.arg');
     return arg(this);
   }
 
   public get norm(): number {
+    invariant(this, Complex, 'get Complex.prototype.norm');
     return norm(this);
   }
 
-  public add(z: Complex): Complex {
+  public add(this: Complex, z: Complex): Complex {
+    invariant(this, Complex, 'Complex.prototype.add');
     return add(Complex, this, z);
   }
 
-  public sub(z: Complex): Complex {
+  public sub(this: Complex, z: Complex): Complex {
+    invariant(this, Complex, 'Complex.prototype.sub');
     return sub(Complex, this, z);
   }
 
-  public mul(z: Complex): Complex {
+  public mul(this: Complex, z: Complex): Complex {
+    invariant(this, Complex, 'Complex.prototype.mul');
     return mul(Complex, this, z);
   }
 
-  public div(z: Complex): Complex {
+  public div(this: Complex, z: Complex): Complex {
+    invariant(this, Complex, 'Complex.prototype.div');
     return div(Complex, this, z);
   }
 
-  public pow(z: Complex): Complex {
+  public pow(this: Complex, z: Complex): Complex {
+    invariant(this, Complex, 'Complex.prototype.pow');
     return pow(Complex, this, z);
   }
 }
