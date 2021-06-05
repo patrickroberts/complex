@@ -24,8 +24,8 @@ it('should compute cartesian components', () => {
 
   const actual = sut(z);
 
-  expect(real).toHaveBeenCalledWith(z);
-  expect(imag).toHaveBeenCalledWith(z);
+  expect(real).toHaveBeenCalledWith(Complex, z);
+  expect(imag).toHaveBeenCalledWith(Complex, z);
   expect(Complex).toHaveBeenCalledWith(expectedReal, expectedImag, _, _, Component.CARTESIAN);
   expect(actual).toBe(expected);
 });

@@ -2,14 +2,16 @@ import _ from '../__fixtures__/any/number';
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
-import Component from '../internal/component';
+import { Component, invariant } from '../internal';
 import abs from '../math/abs';
 import sut from './abs';
 
 jest.mock('../complex');
+jest.mock('../internal/invariant');
 jest.mock('../math/abs');
 
 beforeEach(() => {
+  mock(invariant).mockClear();
   mock(abs).mockClear();
 });
 
@@ -22,8 +24,9 @@ test.each<[Component]>([
   const expected = {} as number;
   const z = new Complex(_, _, expected, _, testHas);
 
-  const actual = sut(z);
+  const actual = sut(Complex, z);
 
+  expect(invariant).toHaveBeenCalledWith(Complex, z);
   expect(abs).not.toHaveBeenCalled();
   expect(z._abs).toBe(expected);
   expect(z._has).toBe(testHas);
@@ -41,10 +44,26 @@ test.each<[Component]>([
 
   mock(abs).mockReturnValueOnce(expected);
 
-  const actual = sut(z);
+  const actual = sut(Complex, z);
 
+  expect(invariant).toHaveBeenCalledWith(Complex, z);
   expect(abs).toHaveBeenCalledWith(testReal, testImag);
   expect(z._abs).toBe(expected);
   expect(z._has).toBe(testHas | Component.ABS);
   expect(actual).toBe(expected);
+});
+
+it('should not modify computed value if invariant is violated', () => {
+  const z = {} as Complex;
+  const expected = new TypeError();
+
+  mock(invariant).mockImplementationOnce(() => {
+    throw expected;
+  });
+
+  expect(() => sut(Complex, z)).toThrowError(expected);
+  expect(invariant).toHaveBeenCalledWith(Complex, z);
+  expect(abs).not.toHaveBeenCalled();
+  expect(z).not.toHaveProperty('_abs');
+  expect(z).not.toHaveProperty('_has');
 });

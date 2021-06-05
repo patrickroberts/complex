@@ -21,8 +21,8 @@ it('should initialize from polar components', () => {
 
   const actual = sut(z);
 
-  expect(abs).toHaveBeenCalledWith(z);
-  expect(arg).toHaveBeenCalledWith(z);
+  expect(abs).toHaveBeenCalledWith(Complex, z);
+  expect(arg).toHaveBeenCalledWith(Complex, z);
   expect(Complex).toHaveBeenCalledWith(_, _, Math.cbrt(testAbs), testArg / 3, Component.POLAR);
   expect(actual).toBe(expected);
 });

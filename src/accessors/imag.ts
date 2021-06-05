@@ -1,8 +1,10 @@
 import Complex from '../complex';
-import Component from '../internal/component';
+import { Component, invariant } from '../internal';
 import imag from '../math/imag';
 
-export default (z: Complex): number => {
+export default (Ctor: typeof Complex, z: Complex): number => {
+  invariant(Ctor, z);
+
   if (!(z._has & Component.IMAG)) {
     z._imag = imag(z._abs, z._arg);
     z._has |= Component.IMAG;
