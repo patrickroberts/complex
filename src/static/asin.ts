@@ -1,18 +1,21 @@
 import Complex from '../complex';
+import { I, NEGATIVE_I, ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import sub from '../methods/sub';
 import log from './log';
 import sqrt from './sqrt';
 
-export default (Ctor: typeof Complex, z: Complex): Complex => (
+const asin = (z: Complex): Complex => (
   mul(
-    Ctor,
-    Ctor.NEGATIVE_I,
-    log(Ctor, add(
-      Ctor,
-      sqrt(Ctor, sub(Ctor, Ctor[1], mul(Ctor, z, z))),
-      mul(Ctor, Ctor.I, z),
+    Complex,
+    NEGATIVE_I,
+    log(add(
+      Complex,
+      sqrt(sub(Complex, ONE, mul(Complex, z, z))),
+      mul(Complex, I, z),
     )),
   )
 );
+
+export default asin;

@@ -7,6 +7,7 @@ import arg from '../math/arg';
 import sut from './arg';
 
 jest.mock('../complex');
+jest.mock('../internal/principal');
 jest.mock('../math/arg');
 
 beforeEach(() => {

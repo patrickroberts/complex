@@ -7,6 +7,7 @@ import imag from '../math/imag';
 import sut from './imag';
 
 jest.mock('../complex');
+jest.mock('../internal/principal');
 jest.mock('../math/imag');
 
 beforeEach(() => {

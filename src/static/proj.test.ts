@@ -6,6 +6,7 @@ import Component from '../internal/component';
 import sut from './proj';
 
 jest.mock('../complex');
+jest.mock('../internal/principal');
 
 const finiteCases = [
   [Number.MAX_VALUE, 0],
@@ -43,7 +44,7 @@ describe.each(finiteCases)('first finite component', (realOrAbs: number) => {
 
       mock(Complex).mockClear();
 
-      const actual = sut(Complex, expected);
+      const actual = sut(expected);
 
       expect(actual).toBe(expected);
     };
@@ -69,16 +70,17 @@ describe.each(finiteCases)('finite component', (finite: number, finiteSign: numb
       real: number, imag: number, abs: number, arg: number, has: Component,
     ) => {
       const z = new Complex(real, imag, abs, arg, has);
+      const expected = {} as Complex;
 
       mock(Complex).mockClear();
+      mock(Complex).mockReturnValueOnce(expected);
 
-      const actual = sut(Complex, z);
+      const actual = sut(z);
 
-      expect(actual._real).toBe(Infinity);
-      expect(actual._imag).toBe(expectedSign);
-      expect(actual._abs).toBe(Infinity);
-      expect(actual._arg).toBe(expectedSign);
-      expect(actual._has).toBe(Component.ALL);
+      expect(Complex).toHaveBeenCalledWith(
+        Infinity, expectedSign, Infinity, expectedSign, Component.ALL,
+      );
+      expect(actual).toBe(expected);
     };
 
     it.each(cartesianComponents)('should compute signed real infinity from infinite cartesian complex number', (

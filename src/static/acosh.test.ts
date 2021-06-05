@@ -1,6 +1,7 @@
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
+import { ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import sub from '../methods/sub';
@@ -32,15 +33,15 @@ it('should delegate implementation to alternate form', () => {
   mock(add).mockReturnValueOnce(addZMulSqrtSubZOneSqrtAddZOne);
   mock(log).mockReturnValueOnce(logAddZMulSqrtSubZOneSqrtAddZOne);
 
-  const actual = sut(Complex, z);
+  const actual = sut(z);
 
-  expect(sub).toBeCalledWith(Complex, z, Complex[1]);
-  expect(sqrt).toBeCalledWith(Complex, subZOne);
-  expect(add).toBeCalledWith(Complex, z, Complex[1]);
-  expect(sqrt).toBeCalledWith(Complex, addZOne);
-  expect(mul).toBeCalledWith(Complex, sqrtSubZOne, sqrtAddZOne);
-  expect(add).toBeCalledWith(Complex, z, mulSqrtSubZOneSqrtAddZOne);
-  expect(log).toBeCalledWith(Complex, addZMulSqrtSubZOneSqrtAddZOne);
+  expect(sub).toHaveBeenCalledWith(Complex, z, ONE);
+  expect(sqrt).toHaveBeenCalledWith(subZOne);
+  expect(add).toHaveBeenCalledWith(Complex, z, ONE);
+  expect(sqrt).toHaveBeenCalledWith(addZOne);
+  expect(mul).toHaveBeenCalledWith(Complex, sqrtSubZOne, sqrtAddZOne);
+  expect(add).toHaveBeenCalledWith(Complex, z, mulSqrtSubZOneSqrtAddZOne);
+  expect(log).toHaveBeenCalledWith(addZMulSqrtSubZOneSqrtAddZOne);
 
   expect(actual).toBe(logAddZMulSqrtSubZOneSqrtAddZOne);
 });

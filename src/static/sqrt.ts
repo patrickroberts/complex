@@ -1,8 +1,10 @@
 import Complex from '../complex';
-import polar from './polar';
+import Component from '../internal/component';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
 
-export default (Ctor: typeof Complex, z: Complex): Complex => polar(
-  Ctor, Math.sqrt(abs(z)), arg(z) / 2,
+const sqrt = (z: Complex): Complex => new Complex(
+  0, 0, Math.sqrt(abs(z)), arg(z) / 2, Component.POLAR,
 );
+
+export default sqrt;

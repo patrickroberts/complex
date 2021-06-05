@@ -4,8 +4,6 @@ import real from '../accessors/real';
 import imag from '../accessors/imag';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
-import cartesian from '../static/cartesian';
-import polar from '../static/polar';
 
 export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
   const have = lhs._has & rhs._has;
@@ -17,8 +15,8 @@ export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
     const d = imag(rhs);
     const norm = c * c + d * d;
 
-    return cartesian(Ctor, (a * c + b * d) / norm, (b * c - a * d) / norm);
+    return new Ctor((a * c + b * d) / norm, (b * c - a * d) / norm, 0, 0, Component.CARTESIAN);
   }
 
-  return polar(Ctor, abs(lhs) / abs(rhs), arg(lhs) - arg(rhs));
+  return new Ctor(0, 0, abs(lhs) / abs(rhs), arg(lhs) - arg(rhs), Component.POLAR);
 };

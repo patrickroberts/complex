@@ -1,6 +1,7 @@
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
+import { I, NEGATIVE_I, ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import sub from '../methods/sub';
@@ -32,15 +33,15 @@ it('should delegate implementation to alternate form', () => {
   mock(log).mockReturnValueOnce(logAddSqrtSubOneMulZZMulIZ);
   mock(mul).mockReturnValueOnce(mulNegativeILogAddSqrtSubOneMulZZMulIZ);
 
-  const actual = sut(Complex, z);
+  const actual = sut(z);
 
   expect(mul).toHaveBeenCalledWith(Complex, z, z);
-  expect(sub).toHaveBeenCalledWith(Complex, Complex[1], mulZZ);
-  expect(sqrt).toHaveBeenCalledWith(Complex, subOneMulZZ);
-  expect(mul).toHaveBeenCalledWith(Complex, Complex.I, z);
+  expect(sub).toHaveBeenCalledWith(Complex, ONE, mulZZ);
+  expect(sqrt).toHaveBeenCalledWith(subOneMulZZ);
+  expect(mul).toHaveBeenCalledWith(Complex, I, z);
   expect(add).toHaveBeenCalledWith(Complex, sqrtSubOneMulZZ, mulIZ);
-  expect(log).toHaveBeenCalledWith(Complex, addSqrtSubOneMulZZMulIZ);
-  expect(mul).toHaveBeenCalledWith(Complex, Complex.I, logAddSqrtSubOneMulZZMulIZ);
+  expect(log).toHaveBeenCalledWith(addSqrtSubOneMulZZMulIZ);
+  expect(mul).toHaveBeenCalledWith(Complex, NEGATIVE_I, logAddSqrtSubOneMulZZMulIZ);
 
   expect(actual).toBe(mulNegativeILogAddSqrtSubOneMulZZMulIZ);
 });

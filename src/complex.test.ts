@@ -9,27 +9,6 @@ import imag from './accessors/imag';
 import abs from './accessors/abs';
 import arg from './accessors/arg';
 import norm from './accessors/norm';
-import from from './static/from';
-import cartesian from './static/cartesian';
-import polar from './static/polar';
-import acos from './static/acos';
-import acosh from './static/acosh';
-import asin from './static/asin';
-import asinh from './static/asinh';
-import atan from './static/atan';
-import atanh from './static/atanh';
-import cbrt from './static/cbrt';
-import conj from './static/conj';
-import cos from './static/cos';
-import cosh from './static/cosh';
-import exp from './static/exp';
-import log from './static/log';
-import proj from './static/proj';
-import sin from './static/sin';
-import sinh from './static/sinh';
-import sqrt from './static/sqrt';
-import tan from './static/tan';
-import tanh from './static/tanh';
 import add from './methods/add';
 import sub from './methods/sub';
 import mul from './methods/mul';
@@ -42,27 +21,6 @@ jest.mock('./accessors/imag');
 jest.mock('./accessors/abs');
 jest.mock('./accessors/arg');
 jest.mock('./accessors/norm');
-jest.mock('./static/from');
-jest.mock('./static/cartesian');
-jest.mock('./static/polar');
-jest.mock('./static/acos');
-jest.mock('./static/acosh');
-jest.mock('./static/asin');
-jest.mock('./static/asinh');
-jest.mock('./static/atan');
-jest.mock('./static/atanh');
-jest.mock('./static/cbrt');
-jest.mock('./static/conj');
-jest.mock('./static/cos');
-jest.mock('./static/cosh');
-jest.mock('./static/exp');
-jest.mock('./static/log');
-jest.mock('./static/proj');
-jest.mock('./static/sin');
-jest.mock('./static/sinh');
-jest.mock('./static/sqrt');
-jest.mock('./static/tan');
-jest.mock('./static/tanh');
 jest.mock('./methods/add');
 jest.mock('./methods/sub');
 jest.mock('./methods/mul');
@@ -76,27 +34,6 @@ beforeEach(() => {
   mock(abs).mockClear();
   mock(arg).mockClear();
   mock(norm).mockClear();
-  mock(from).mockClear();
-  mock(cartesian).mockClear();
-  mock(polar).mockClear();
-  mock(acos).mockClear();
-  mock(acosh).mockClear();
-  mock(asin).mockClear();
-  mock(asinh).mockClear();
-  mock(atan).mockClear();
-  mock(atanh).mockClear();
-  mock(cbrt).mockClear();
-  mock(conj).mockClear();
-  mock(cos).mockClear();
-  mock(cosh).mockClear();
-  mock(exp).mockClear();
-  mock(log).mockClear();
-  mock(proj).mockClear();
-  mock(sin).mockClear();
-  mock(sinh).mockClear();
-  mock(sqrt).mockClear();
-  mock(tan).mockClear();
-  mock(tanh).mockClear();
   mock(add).mockClear();
   mock(sub).mockClear();
   mock(mul).mockClear();
@@ -138,10 +75,7 @@ describe('constructor', () => {
   });
 });
 
-describe.each<[
-  'real' | 'imag' | 'abs' | 'arg' | 'norm',
-  typeof real,
-]>([
+describe.each<['real' | 'imag' | 'abs' | 'arg' | 'norm', typeof real]>([
   ['real', real],
   ['imag', imag],
   ['abs', abs],
@@ -164,159 +98,23 @@ describe.each<[
   });
 });
 
-describe('Complex.cartesian', () => {
-  it('should delegate to cartesian', () => {
-    const testReal = {} as number;
-    const testImag = {} as number;
-    const expected = {} as Complex;
-
-    mock(cartesian).mockReturnValueOnce(expected);
-
-    const actual = Complex.cartesian(testReal, testImag);
-
-    expect(cartesian).toHaveBeenCalledWith(Complex, testReal, testImag);
-    expect(actual).toBe(expected);
-  });
-
-  it('should delegate to cartesian with default imaginary value of 0', () => {
-    const testReal = {} as number;
-    const expected = {} as Complex;
-
-    mock(cartesian).mockReturnValueOnce(expected);
-
-    const actual = Complex.cartesian(testReal);
-
-    expect(cartesian).toHaveBeenCalledWith(Complex, testReal, 0);
-    expect(actual).toBe(expected);
-  });
-});
-
-describe('Complex.polar', () => {
-  it('should delegate to polar', () => {
-    const testAbs = {} as number;
-    const testArg = {} as number;
-    const expected = {} as Complex;
-
-    mock(polar).mockReturnValueOnce(expected);
-
-    const actual = Complex.polar(testAbs, testArg);
-
-    expect(polar).toHaveBeenCalledWith(Complex, testAbs, testArg);
-    expect(actual).toBe(expected);
-  });
-
-  it('should delegate to polar with default argument of 0', () => {
-    const testAbs = {} as number;
-    const expected = {} as Complex;
-
-    mock(polar).mockReturnValueOnce(expected);
-
-    const actual = Complex.polar(testAbs);
-
-    expect(polar).toHaveBeenCalledWith(Complex, testAbs, 0);
-    expect(actual).toBe(expected);
-  });
-});
-
-describe.each<[
-  'acos' | 'acosh' | 'asin' | 'asinh' | 'atan' | 'atanh' | 'cbrt' | 'conj' | 'cos' |
-  'cosh' | 'exp' | 'log' | 'proj' | 'sin' | 'sinh' | 'sqrt' | 'tan' | 'tanh',
-  typeof cbrt,
-]>([
-  ['acos', acos],
-  ['acosh', acosh],
-  ['asin', asin],
-  ['asinh', asinh],
-  ['atan', atan],
-  ['atanh', atanh],
-  ['cbrt', cbrt],
-  ['conj', conj],
-  ['cos', cos],
-  ['cosh', cosh],
-  ['exp', exp],
-  ['log', log],
-  ['proj', proj],
-  ['sin', sin],
-  ['sinh', sinh],
-  ['sqrt', sqrt],
-  ['tan', tan],
-  ['tanh', tanh],
-])('static methods', (method, impl) => {
-  describe(`Complex.${method}`, () => {
-    it(`should delegate to ${impl.name} with Complex value`, () => {
-      const z = {} as Complex;
-      const expected = {} as Complex;
-
-      mock(from).mockReturnValueOnce(z);
-      mock(impl).mockReturnValueOnce(expected);
-
-      const actual = Complex[method](z);
-
-      expect(from).toHaveBeenCalledWith(Complex, z, 0);
-      expect(impl).toHaveBeenCalledWith(Complex, z);
-      expect(actual).toBe(expected);
-    });
-
-    it(`should delegate to ${impl.name} with real and imaginary values`, () => {
-      const testReal = {} as number;
-      const testImag = {} as number;
-      const z = {} as Complex;
-      const expected = {} as Complex;
-
-      mock(from).mockReturnValueOnce(z);
-      mock(impl).mockReturnValueOnce(expected);
-
-      const actual = Complex[method](testReal, testImag);
-
-      expect(from).toHaveBeenCalledWith(Complex, testReal, testImag);
-      expect(impl).toHaveBeenCalledWith(Complex, z);
-      expect(actual).toBe(expected);
-    });
-  });
-});
-
-describe.each<[
-  'add' | 'sub' | 'subtract' | 'mul' | 'multiply' | 'div' | 'divide' | 'pow',
-  typeof add,
-]>([
+describe.each<['add' | 'sub' | 'mul' | 'div' | 'pow', typeof add]>([
   ['add', add],
   ['sub', sub],
-  ['subtract', sub],
   ['mul', mul],
-  ['multiply', mul],
   ['div', div],
-  ['divide', div],
   ['pow', pow],
 ])('methods', (method, impl) => {
   describe(`Complex.prototype.${method}`, () => {
-    it(`should delegate to ${impl.name} with Complex value`, () => {
+    it(`should delegate to ${impl.name}`, () => {
       const lhs = new Complex(_, _, _, _, _);
       const rhs = {} as Complex;
       const expected = {} as Complex;
 
-      mock(from).mockReturnValueOnce(rhs);
       mock(impl).mockReturnValueOnce(expected);
 
       const actual = lhs[method](rhs);
 
-      expect(from).toHaveBeenCalledWith(Complex, rhs, 0);
-      expect(impl).toHaveBeenCalledWith(Complex, lhs, rhs);
-      expect(actual).toBe(expected);
-    });
-
-    it(`should delegate to ${impl.name} with real and imaginary values`, () => {
-      const lhs = new Complex(_, _, _, _, _);
-      const testReal = {} as number;
-      const testImag = {} as number;
-      const rhs = {} as Complex;
-      const expected = {} as Complex;
-
-      mock(from).mockReturnValueOnce(rhs);
-      mock(impl).mockReturnValueOnce(expected);
-
-      const actual = lhs[method](testReal, testImag);
-
-      expect(from).toHaveBeenCalledWith(Complex, testReal, testImag);
       expect(impl).toHaveBeenCalledWith(Complex, lhs, rhs);
       expect(actual).toBe(expected);
     });

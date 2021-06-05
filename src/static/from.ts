@@ -1,10 +1,16 @@
 import Complex from '../complex';
-import cartesian from './cartesian';
+import Component from '../internal/component';
 
-export default (Ctor: typeof Complex, r: Complex | number, i = 0): Complex => {
+const from: {
+  (z: Complex): Complex;
+  (real: number, imag?: number): Complex;
+  (...args: [z: Complex] | [real: number, imag?: number]): Complex;
+} = (r: Complex | number, i = 0): Complex => {
   if (typeof r === 'number') {
-    return cartesian(Ctor, r, i);
+    return new Complex(r, i, 0, 0, Component.CARTESIAN);
   }
 
   return r;
 };
+
+export default from;

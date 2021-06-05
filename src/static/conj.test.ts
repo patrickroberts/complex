@@ -19,12 +19,14 @@ test.each([
   const testImag = 1;
   const testAbs = Math.SQRT2;
   const testArg = Math.PI / 4;
-
   const z = new Complex(testReal, testImag, testAbs, testArg, testHas);
+  const expected = {} as Complex;
 
   mock(Complex).mockClear();
+  mock(Complex).mockReturnValueOnce(expected);
 
-  sut(Complex, z);
+  const actual = sut(z);
 
   expect(Complex).toHaveBeenCalledWith(testReal, -testImag, testAbs, -testArg, testHas);
+  expect(actual).toBe(expected);
 });

@@ -1,8 +1,10 @@
 import Complex from '../complex';
+import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
-import polar from './polar';
 
-export default (Ctor: typeof Complex, z: Complex): Complex => polar(
-  Ctor, Math.exp(real(z)), imag(z),
+const exp = (z: Complex): Complex => new Complex(
+  0, 0, Math.exp(real(z)), imag(z), Component.POLAR,
 );
+
+export default exp;

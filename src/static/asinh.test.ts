@@ -1,6 +1,7 @@
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
+import { ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import log from './log';
@@ -26,13 +27,13 @@ it('should delegate implementation to alternate form', () => {
   mock(add).mockReturnValueOnce(addSqrtAddMulZZOneZ);
   mock(log).mockReturnValueOnce(logAddSqrtAddMulZZOneZ);
 
-  const actual = sut(Complex, z);
+  const actual = sut(z);
 
-  expect(mul).toBeCalledWith(Complex, z, z);
-  expect(add).toBeCalledWith(Complex, mulZZ, Complex[1]);
-  expect(sqrt).toBeCalledWith(Complex, addMulZZOne);
-  expect(add).toBeCalledWith(Complex, sqrtAddMulZZOne, z);
-  expect(log).toBeCalledWith(Complex, addSqrtAddMulZZOneZ);
+  expect(mul).toHaveBeenCalledWith(Complex, z, z);
+  expect(add).toHaveBeenCalledWith(Complex, mulZZ, ONE);
+  expect(sqrt).toHaveBeenCalledWith(addMulZZOne);
+  expect(add).toHaveBeenCalledWith(Complex, sqrtAddMulZZOne, z);
+  expect(log).toHaveBeenCalledWith(addSqrtAddMulZZOneZ);
 
   expect(actual).toBe(logAddSqrtAddMulZZOneZ);
 });

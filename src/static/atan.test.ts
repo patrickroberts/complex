@@ -1,6 +1,7 @@
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
+import { I, I1_2, ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import sub from '../methods/sub';
@@ -30,15 +31,15 @@ it('should delegate implementation to alternate form', () => {
   mock(sub).mockReturnValueOnce(subLogSubOneMulIZLogAddOneMulIZ);
   mock(mul).mockReturnValueOnce(mulIHalfSubLogSubOneMulIZLogAddOneMulIZ);
 
-  const actual = sut(Complex, z);
+  const actual = sut(z);
 
-  expect(mul).toBeCalledWith(Complex, Complex.I, z);
-  expect(sub).toBeCalledWith(Complex, Complex[1], mulIZ);
-  expect(log).toBeCalledWith(Complex, subOneMulIZ);
-  expect(add).toBeCalledWith(Complex, Complex[1], mulIZ);
-  expect(log).toBeCalledWith(Complex, addOneMulIZ);
-  expect(sub).toBeCalledWith(Complex, logSubOneMulIZ, logAddOneMulIZ);
-  expect(mul).toBeCalledWith(Complex, Complex.I1_2, subLogSubOneMulIZLogAddOneMulIZ);
+  expect(mul).toHaveBeenCalledWith(Complex, I, z);
+  expect(sub).toHaveBeenCalledWith(Complex, ONE, mulIZ);
+  expect(log).toHaveBeenCalledWith(subOneMulIZ);
+  expect(add).toHaveBeenCalledWith(Complex, ONE, mulIZ);
+  expect(log).toHaveBeenCalledWith(addOneMulIZ);
+  expect(sub).toHaveBeenCalledWith(Complex, logSubOneMulIZ, logAddOneMulIZ);
+  expect(mul).toHaveBeenCalledWith(Complex, I1_2, subLogSubOneMulIZLogAddOneMulIZ);
 
   expect(actual).toBe(mulIHalfSubLogSubOneMulIZLogAddOneMulIZ);
 });

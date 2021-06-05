@@ -1,27 +1,29 @@
+import _ from '../__fixtures__/any/number';
 import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
+import Component from '../internal/component';
 import abs from '../accessors/abs';
 import arg from '../accessors/arg';
-import polar from './polar';
 import sut from './sqrt';
 
 jest.mock('../complex');
 jest.mock('../accessors/abs');
 jest.mock('../accessors/arg');
-jest.mock('./polar');
 
 it('should initialize from polar components', () => {
   const testAbs = 4;
   const testArg = 2;
-  const z = polar(Complex, testAbs, testArg);
+  const z = new Complex(_, _, testAbs, testArg, Component.POLAR);
+  const expected = {} as Complex;
 
-  mock(polar).mockReset();
+  mock(Complex).mockReset();
+  mock(Complex).mockReturnValueOnce(expected);
 
-  const actual = sut(Complex, z);
+  const actual = sut(z);
 
   expect(abs).toHaveBeenCalledWith(z);
   expect(arg).toHaveBeenCalledWith(z);
-  expect(polar).toHaveBeenCalledWith(Complex, Math.sqrt(testAbs), testArg / 2);
-  expect(polar).toHaveReturnedWith(actual);
+  expect(Complex).toHaveBeenCalledWith(_, _, Math.sqrt(testAbs), testArg / 2, Component.POLAR);
+  expect(actual).toBe(expected);
 });

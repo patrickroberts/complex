@@ -1,6 +1,8 @@
 import Complex from '../complex';
 import Component from '../internal/component';
 
-export default (Ctor: typeof Complex, real: number, imag: number): Complex => new Ctor(
+const cartesian = (real: number, imag: number): Complex => new Complex(
   real, imag, 0, 0, Component.CARTESIAN,
 );
+
+export default cartesian;

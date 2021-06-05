@@ -1,18 +1,21 @@
 import Complex from '../complex';
+import { ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import sub from '../methods/sub';
 import log from './log';
 import sqrt from './sqrt';
 
-export default (Ctor: typeof Complex, z: Complex): Complex => (
-  log(Ctor, add(
-    Ctor,
+const acosh = (z: Complex): Complex => (
+  log(add(
+    Complex,
     z,
     mul(
-      Ctor,
-      sqrt(Ctor, sub(Ctor, z, Ctor[1])),
-      sqrt(Ctor, add(Ctor, z, Ctor[1])),
+      Complex,
+      sqrt(sub(Complex, z, ONE)),
+      sqrt(add(Complex, z, ONE)),
     ),
   ))
 );
+
+export default acosh;

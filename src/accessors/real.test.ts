@@ -7,6 +7,7 @@ import real from '../math/real';
 import sut from './real';
 
 jest.mock('../complex');
+jest.mock('../internal/principal');
 jest.mock('../math/real');
 
 beforeEach(() => {

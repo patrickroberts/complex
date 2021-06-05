@@ -1,15 +1,18 @@
 import Complex from '../complex';
+import { I, I1_2, ONE } from '../constants';
 import add from '../methods/add';
 import mul from '../methods/mul';
 import sub from '../methods/sub';
 import log from './log';
 
-export default (Ctor: typeof Complex, z: Complex): Complex => {
-  const iz = mul(Ctor, Ctor.I, z);
+const atan = (z: Complex): Complex => {
+  const iz = mul(Complex, I, z);
 
-  return mul(Ctor, Ctor.I1_2, sub(
-    Ctor,
-    log(Ctor, sub(Ctor, Ctor[1], iz)),
-    log(Ctor, add(Ctor, Ctor[1], iz)),
+  return mul(Complex, I1_2, sub(
+    Complex,
+    log(sub(Complex, ONE, iz)),
+    log(add(Complex, ONE, iz)),
   ));
 };
+
+export default atan;

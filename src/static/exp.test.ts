@@ -1,24 +1,29 @@
+import _ from '../__fixtures__/any/number';
+import mock from '../__fixtures__/mock';
+
 import Complex from '../complex';
+import Component from '../internal/component';
 import real from '../accessors/real';
 import imag from '../accessors/imag';
-import cartesian from './cartesian';
-import polar from './polar';
 import sut from './exp';
 
 jest.mock('../complex');
 jest.mock('../accessors/real');
 jest.mock('../accessors/imag');
-jest.mock('./polar');
 
 it('should initialize polar components from cartesian components', () => {
   const testReal = 3;
   const testImag = {} as number;
-  const z = cartesian(Complex, testReal, testImag);
+  const z = new Complex(testReal, testImag, _, _, Component.CARTESIAN);
+  const expected = {} as Complex;
 
-  const actual = sut(Complex, z);
+  mock(Complex).mockClear();
+  mock(Complex).mockReturnValueOnce(expected);
+
+  const actual = sut(z);
 
   expect(real).toHaveBeenCalledWith(z);
   expect(imag).toHaveBeenCalledWith(z);
-  expect(polar).toHaveBeenCalledWith(Complex, Math.exp(testReal), testImag);
-  expect(polar).toHaveReturnedWith(actual);
+  expect(Complex).toHaveBeenCalledWith(_, _, Math.exp(testReal), testImag, Component.POLAR);
+  expect(actual).toBe(expected);
 });
