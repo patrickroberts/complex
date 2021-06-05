@@ -3,8 +3,7 @@ import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import Component from '../internal/component';
-import abs from '../accessors/abs';
-import arg from '../accessors/arg';
+import { abs, arg } from '../accessors';
 import sut from './cbrt';
 
 jest.mock('../complex');

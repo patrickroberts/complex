@@ -2,18 +2,9 @@ import _ from './__fixtures__/any/number';
 import mock from './__fixtures__/mock';
 
 import Complex from './complex';
-import Component from './internal/component';
-import principal from './internal/principal';
-import real from './accessors/real';
-import imag from './accessors/imag';
-import abs from './accessors/abs';
-import arg from './accessors/arg';
-import norm from './accessors/norm';
-import add from './methods/add';
-import sub from './methods/sub';
-import mul from './methods/mul';
-import div from './methods/div';
-import pow from './methods/pow';
+import { Component, principal } from './internal';
+import { real, imag, abs, arg, norm } from './accessors';
+import { add, sub, mul, div, pow } from './methods';
 
 jest.mock('./internal/principal');
 jest.mock('./accessors/real');

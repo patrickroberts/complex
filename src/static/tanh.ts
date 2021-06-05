@@ -1,7 +1,6 @@
 import Complex from '../complex';
 import Component from '../internal/component';
-import real from '../accessors/real';
-import imag from '../accessors/imag';
+import { real, imag } from '../accessors';
 
 const tanh = (z: Complex): Complex => {
   const a = 2 * real(z);

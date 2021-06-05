@@ -1,8 +1,6 @@
 import Complex from '../complex';
 import { I, ONE, PI1_2 } from '../constants';
-import add from '../methods/add';
-import mul from '../methods/mul';
-import sub from '../methods/sub';
+import { add, sub, mul } from '../methods';
 import log from './log';
 import sqrt from './sqrt';
 

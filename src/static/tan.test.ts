@@ -1,11 +1,10 @@
 import _ from '../__fixtures__/any/number';
+import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import Component from '../internal/component';
-import real from '../accessors/real';
-import imag from '../accessors/imag';
+import { real, imag } from '../accessors';
 import sut from './tan';
-import mock from '../__fixtures__/mock';
 
 jest.mock('../complex');
 jest.mock('../accessors/real');

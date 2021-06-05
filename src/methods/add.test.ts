@@ -3,8 +3,7 @@ import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import Component from '../internal/component';
-import real from '../accessors/real';
-import imag from '../accessors/imag';
+import { real, imag } from '../accessors';
 import sut from './add';
 
 jest.mock('../complex');

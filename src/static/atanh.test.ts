@@ -2,9 +2,7 @@ import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import { ONE, ONE1_2 } from '../constants';
-import add from '../methods/add';
-import mul from '../methods/mul';
-import sub from '../methods/sub';
+import { add, sub, mul } from '../methods';
 import log from './log';
 import sut from './atanh';
 

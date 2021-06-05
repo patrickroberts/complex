@@ -1,9 +1,6 @@
 import Complex from '../complex';
 import Component from '../internal/component';
-import real from '../accessors/real';
-import imag from '../accessors/imag';
-import abs from '../accessors/abs';
-import arg from '../accessors/arg';
+import { real, imag, abs, arg } from '../accessors';
 import mul from './mul';
 import div from './div';
 

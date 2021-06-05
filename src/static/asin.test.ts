@@ -2,9 +2,7 @@ import mock from '../__fixtures__/mock';
 
 import Complex from '../complex';
 import { I, NEGATIVE_I, ONE } from '../constants';
-import add from '../methods/add';
-import mul from '../methods/mul';
-import sub from '../methods/sub';
+import { add, sub, mul } from '../methods';
 import log from './log';
 import sqrt from './sqrt';
 import sut from './asin';

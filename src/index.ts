@@ -1,23 +1,6 @@
 export { default as Complex } from './complex';
 export { E, I, LN10, LN2, LOG10E, LOG2E, PI, SQRT1_2, SQRT2 } from './constants';
-export { default as acos } from './static/acos';
-export { default as acosh } from './static/acosh';
-export { default as asin } from './static/asin';
-export { default as asinh } from './static/asinh';
-export { default as atan } from './static/atan';
-export { default as atanh } from './static/atanh';
-export { default as cartesian } from './static/cartesian';
-export { default as cbrt } from './static/cbrt';
-export { default as conj } from './static/conj';
-export { default as cos } from './static/cos';
-export { default as cosh } from './static/cosh';
-export { default as exp } from './static/exp';
-export { default as from } from './static/from';
-export { default as log } from './static/log';
-export { default as polar } from './static/polar';
-export { default as proj } from './static/proj';
-export { default as sin } from './static/sin';
-export { default as sinh } from './static/sinh';
-export { default as sqrt } from './static/sqrt';
-export { default as tan } from './static/tan';
-export { default as tanh } from './static/tanh';
+export {
+  acos, acosh, asin, asinh, atan, atanh, cartesian, cbrt, conj, cos, cosh, exp, from, log, polar,
+  proj, sin, sinh, sqrt, tan, tanh,
+} from './static';
