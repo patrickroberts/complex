@@ -4,7 +4,7 @@ import mock from './__fixtures__/mock';
 import Complex from './complex';
 import { Component, principal } from './internal';
 import { real, imag, abs, arg, norm } from './accessors';
-import { add, sub, mul, div, pow } from './methods';
+import { add, sub, mul, div, pow, toString } from './methods';
 
 jest.mock('./internal/principal');
 jest.mock('./accessors/real');
@@ -17,6 +17,7 @@ jest.mock('./methods/sub');
 jest.mock('./methods/mul');
 jest.mock('./methods/div');
 jest.mock('./methods/pow');
+jest.mock('./methods/toString');
 
 beforeEach(() => {
   mock(principal).mockClear();
@@ -109,5 +110,19 @@ describe.each<['add' | 'sub' | 'mul' | 'div' | 'pow', typeof add]>([
       expect(impl).toHaveBeenCalledWith(Complex, lhs, rhs);
       expect(actual).toBe(expected);
     });
+  });
+});
+
+describe('Complex.prototype.toString', () => {
+  it('should delegate to toString', () => {
+    const z = new Complex(_, _, _, _, _);
+    const expected = {} as string;
+
+    mock(toString).mockReturnValueOnce(expected);
+
+    const actual = z.toString();
+
+    expect(toString).toHaveBeenCalledWith(z);
+    expect(actual).toBe(expected);
   });
 });
