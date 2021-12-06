@@ -4,3 +4,4 @@ export {
   acos, acosh, add, asin, asinh, atan, atanh, cartesian, cbrt, conj, cos, cosh, div, exp, from, log,
   mul, polar, pow, proj, sin, sinh, sqrt, sub, tan, tanh,
 } from './static';
+export { BinaryExpression, CallExpression, Expression, Identifier, Literal, UnaryExpression, parse } from './parser';
