@@ -14,11 +14,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: Install and Docs
         run: |
           npm ci
           npm run clean
+          npm run build:ne
           npm test -- --ci
           bash <(curl -s https://codecov.io/bash)
           npm run docs
