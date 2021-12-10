@@ -80,23 +80,23 @@ ArgumentList ->
   | ArgumentList "," Expression {% fold %}
 
 PrimaryExpression ->
-    Identifier {% identifier %}
-  | Literal {% literal %}
+    Identifier {% id %}
+  | Literal {% id %}
   | ParenthesizedExpression {% id %}
 
 ParenthesizedExpression -> "(" Expression ")" {% unwrap %}
 
-Identifier -> IdentifierName {% id %}
+Identifier -> IdentifierName {% identifier %}
 
 IdentifierName ->
-    IdentifierStart {% id %}
+    IdentifierStart {% join %}
   | IdentifierName IdentifierPart {% join %}
 
 IdentifierStart -> [$A-Z_a-z]
 
 IdentifierPart -> [$0-9A-Z_a-z]
 
-Literal -> NumericLiteral {% id %}
+Literal -> NumericLiteral {% literal %}
 
 NumericLiteral ->
     DecimalLiteral {% id %}
