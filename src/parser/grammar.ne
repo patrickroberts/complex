@@ -38,7 +38,7 @@ const unary = (d: any[]): UnaryExpression => ({ type: 'UnaryExpression', operato
 const call = (d: any[]): CallExpression => ({ type: 'CallExpression', callee: d[0], arguments: d[2] });
 const identifier = (d: any[]): Identifier => ({ type: 'Identifier', name: d[0] });
 const literal = (d: any[]): Literal => ({ type: 'Literal', value: Number(d[0]) });
-const fold = (d: any[]): Expression[] => [...d[0], d[2]];
+const fold = (d: any[]): Expression[] => d[0].concat(d[2]);
 const empty = (): Expression[] => [];
 const join = (d: any[]): string => d.join('');
 %}
