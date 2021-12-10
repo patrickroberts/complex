@@ -33,6 +33,9 @@ export default [
       {
         file: pkg.browser,
         format: 'umd',
+        globals: {
+          nearley: 'nearley',
+        },
         name,
         sourcemap: production,
       },

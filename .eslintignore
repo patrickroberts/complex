@@ -2,3 +2,4 @@ coverage/
 docs/
 dst/
 node_modules/
+src/parser/grammar.ts
