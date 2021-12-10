@@ -1,8 +1,8 @@
 import { Grammar, Parser } from 'nearley';
 import grammar, { Expression } from './grammar';
 
-const parser = new Parser(Grammar.fromCompiled(grammar));
-const state = parser.save();
+let parser: Parser;
+let state: ReturnType<Parser['save']>;
 
 const feed = (chunk: string) => {
   try {
@@ -18,7 +18,12 @@ const feed = (chunk: string) => {
 };
 
 const parse = (expression: string): Expression => {
-  parser.restore(state);
+  if (!parser) {
+    parser = new Parser(Grammar.fromCompiled(grammar));
+    state = parser.save();
+  } else {
+    parser.restore(state);
+  }
 
   const { results } = feed(expression);
 
