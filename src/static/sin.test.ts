@@ -13,8 +13,8 @@ jest.mock('../accessors/imag');
 it('should compute cartesian components', () => {
   const testReal = 3;
   const testImag = 4;
-  const expectedReal = Math.cos(testReal) * Math.sinh(testImag);
-  const expectedImag = Math.sin(testImag) * Math.cosh(testReal);
+  const expectedReal = Math.sin(testReal) * Math.cosh(testImag);
+  const expectedImag = Math.cos(testReal) * Math.sinh(testImag);
   const z = new Complex(testReal, testImag, _, _, Component.CARTESIAN);
   const expected = {} as Complex;
 

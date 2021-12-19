@@ -7,7 +7,7 @@ const sin = (z: Complex): Complex => {
   const b = imag(Complex, z);
 
   return new Complex(
-    Math.cos(a) * Math.sinh(b), Math.sin(b) * Math.cosh(a), 0, 0, Component.CARTESIAN,
+    Math.sin(a) * Math.cosh(b), Math.cos(a) * Math.sinh(b), 0, 0, Component.CARTESIAN,
   );
 };
 
