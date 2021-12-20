@@ -4,7 +4,7 @@ import mock from './__fixtures__/mock';
 import Complex from './complex';
 import { Component, principal } from './internal';
 import { real, imag, abs, arg, norm } from './accessors';
-import { add, sub, mul, div, pow, toString } from './methods';
+import { add, sub, mul, div, mod, pow, toString } from './methods';
 
 jest.mock('./internal/principal');
 jest.mock('./accessors/real');
@@ -16,6 +16,7 @@ jest.mock('./methods/add');
 jest.mock('./methods/sub');
 jest.mock('./methods/mul');
 jest.mock('./methods/div');
+jest.mock('./methods/mod');
 jest.mock('./methods/pow');
 jest.mock('./methods/toString');
 
@@ -30,6 +31,7 @@ beforeEach(() => {
   mock(sub).mockClear();
   mock(mul).mockClear();
   mock(div).mockClear();
+  mock(mod).mockClear();
   mock(pow).mockClear();
 });
 
@@ -90,11 +92,12 @@ describe.each<['real' | 'imag' | 'abs' | 'arg' | 'norm', typeof real]>([
   });
 });
 
-describe.each<['add' | 'sub' | 'mul' | 'div' | 'pow', typeof add]>([
+describe.each<['add' | 'sub' | 'mul' | 'div' | 'mod' | 'pow', typeof add]>([
   ['add', add],
   ['sub', sub],
   ['mul', mul],
   ['div', div],
+  ['mod', mod],
   ['pow', pow],
 ])('methods', (name, impl) => {
   describe(`Complex.prototype.${name}`, () => {

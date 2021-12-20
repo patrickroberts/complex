@@ -1,6 +1,6 @@
 import { Component, principal } from './internal';
 import { real, imag, abs, arg, norm } from './accessors';
-import { add, sub, mul, div, pow, toString } from './methods';
+import { add, sub, mul, div, mod, pow, toString } from './methods';
 
 export default class Complex {
   /** @internal */
@@ -61,6 +61,10 @@ export default class Complex {
 
   public div(this: Complex, z: Complex): Complex {
     return div(Complex, this, z);
+  }
+
+  public mod(this: Complex, z: Complex): Complex {
+    return mod(Complex, this, z);
   }
 
   public pow(this: Complex, z: Complex): Complex {
