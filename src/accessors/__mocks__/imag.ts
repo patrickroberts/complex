@@ -1,3 +1,5 @@
 import Complex from '../../complex';
 
-export default jest.fn((_: typeof Complex, z: Complex): number => z._imag);
+const imag = (_: typeof Complex, z: Complex): number => z._imag;
+
+export default jest.fn(imag);

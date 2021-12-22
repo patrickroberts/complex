@@ -1,7 +1,7 @@
 import Complex from '../complex';
 import { Component, principal } from '../internal';
 
-export default jest.fn(function MockComplex(
+function MockComplex(
   this: Complex, real: number, imag: number, abs: number, arg: number, has: Component,
 ): Complex {
   this._real = real;
@@ -11,4 +11,6 @@ export default jest.fn(function MockComplex(
   this._has = has;
 
   return this;
-});
+}
+
+export default jest.fn(MockComplex);

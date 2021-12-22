@@ -1,3 +1,5 @@
 import Complex from '../../complex';
 
-export default jest.fn((_: typeof Complex, z: Complex): number => z._real);
+const real = (_: typeof Complex, z: Complex): number => z._real;
+
+export default jest.fn(real);

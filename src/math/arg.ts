@@ -1,1 +1,3 @@
-export default (real: number, imag: number): number => Math.atan2(imag, real);
+const arg = (real: number, imag: number): number => Math.atan2(imag, real);
+
+export default arg;

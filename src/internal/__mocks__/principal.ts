@@ -1,1 +1,3 @@
-export default jest.fn((value: number): number => value);
+const principal = (value: number): number => value;
+
+export default jest.fn(principal);

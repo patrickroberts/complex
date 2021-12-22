@@ -1,7 +1,7 @@
 import Complex from '../complex';
 import { Component, invariant } from '../internal';
 
-export default (Ctor: typeof Complex, z: Complex): number => {
+const norm = (Ctor: typeof Complex, z: Complex): number => {
   invariant(Ctor, z);
 
   if (z._has & Component.ABS) {
@@ -10,3 +10,5 @@ export default (Ctor: typeof Complex, z: Complex): number => {
 
   return z._real * z._real + z._imag * z._imag;
 };
+
+export default norm;

@@ -1,3 +1,5 @@
 import Complex from '../../complex';
 
-export default jest.fn((_: typeof Complex, z: Complex): number => z._abs);
+const abs = (_: typeof Complex, z: Complex): number => z._abs;
+
+export default jest.fn(abs);

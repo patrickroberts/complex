@@ -4,7 +4,7 @@ import { real, imag, abs, arg } from '../accessors';
 import mul from './mul';
 import div from './div';
 
-export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
+const pow = (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
   const c = real(Ctor, rhs);
   const d = imag(Ctor, rhs);
 
@@ -23,3 +23,5 @@ export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
 
   return new Ctor(0, 0, m ** c * Math.exp(-a * d), d * Math.log(m) + a * c, Component.POLAR);
 };
+
+export default pow;

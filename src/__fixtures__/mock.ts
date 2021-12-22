@@ -10,6 +10,8 @@ type Mock<T extends Callable | Constructible> =
 
 export { Mock };
 
-export default <T extends Callable | Constructible> (
+const mock = <T extends Callable | Constructible> (
   fn: T,
 ): Mock<T> => fn as unknown as Mock<T>;
+
+export default mock;

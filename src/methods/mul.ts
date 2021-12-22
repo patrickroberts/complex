@@ -2,7 +2,7 @@ import Complex from '../complex';
 import Component from '../internal/component';
 import { real, imag, abs, arg } from '../accessors';
 
-export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
+const mul = (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
   const have = lhs._has & rhs._has;
 
   if (!(have & Component.POLAR) && (have & Component.CARTESIAN)) {
@@ -18,3 +18,5 @@ export default (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
     0, 0, abs(Ctor, lhs) * abs(Ctor, rhs), arg(Ctor, lhs) + arg(Ctor, rhs), Component.POLAR,
   );
 };
+
+export default mul;
