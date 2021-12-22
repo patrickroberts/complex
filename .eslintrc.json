@@ -30,6 +30,7 @@
     "@typescript-eslint/member-delimiter-style": "error",
     "@typescript-eslint/no-dupe-class-members": "error",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-redeclare": "error",
     "@typescript-eslint/no-shadow": "error",

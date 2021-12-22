@@ -1,6 +1,7 @@
 {
   "allReflectionsHaveOwnDocument": true,
-  "disableOutputCheck": true,
+  "cleanOutputDir": false,
+  "githubPages": false,
   "name": "complex-js",
   "out": "docs",
   "preserveWatchOutput": true,
