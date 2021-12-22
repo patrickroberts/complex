@@ -5,3 +5,4 @@ export {
   mod, mul, polar, pow, proj, sin, sinh, sqrt, sub, tan, tanh, trunc,
 } from './static';
 export { BinaryExpression, CallExpression, Expression, Identifier, Literal, UnaryExpression, parse } from './parser';
+export { Bindings, Value, bindings, compile } from './compiler';

@@ -1,23 +1,23 @@
 @preprocessor typescript
 
 @{%
-export interface BinaryExpression {
+export interface BinaryExpression<T = number> {
   type: 'BinaryExpression';
   operator: '+' | '-' | '*' | '/' | '%' | '**';
-  left: Expression;
-  right: Expression;
+  left: Expression<T>;
+  right: Expression<T>;
 }
 
-export interface UnaryExpression {
+export interface UnaryExpression<T = number> {
   type: 'UnaryExpression';
   operator: '+' | '-';
-  argument: Expression;
+  argument: Expression<T>;
 }
 
-export interface CallExpression {
+export interface CallExpression<T = number> {
   type: 'CallExpression';
   callee: Identifier;
-  arguments: Expression[];
+  arguments: Expression<T>[];
 }
 
 export interface Identifier {
@@ -25,12 +25,12 @@ export interface Identifier {
   name: string;
 }
 
-export interface Literal {
+export interface Literal<T = number> {
   type: 'Literal';
-  value: number;
+  value: T;
 }
 
-export type Expression = BinaryExpression | UnaryExpression | CallExpression | Identifier | Literal;
+export type Expression<T = number> = BinaryExpression<T> | UnaryExpression<T> | CallExpression<T> | Identifier | Literal<T>;
 
 const unwrap = (d: any[]) => d[1];
 const binary = (d: any[]) => ({ type: 'BinaryExpression', operator: d[2], left: d[0], right: d[4] });
