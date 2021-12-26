@@ -1,7 +1,8 @@
 /* eslint-disable prefer-object-spread, prefer-spread */
 import Complex from '../complex';
 import { E, I, PI } from '../constants';
-import { BinaryExpression, Expression, UnaryExpression, parse } from '../parser';
+import { BinaryExpression, Expression, UnaryExpression } from '../expressions';
+import parse from '../parser';
 import { acos, acosh, add, asin, asinh, atan, atanh, cbrt, conj, cos, cosh, div, exp, from, log, mod, mul, pow, proj, sin, sinh, sqrt, sub, tan, tanh, trunc } from '../static';
 
 export type Value = Complex | ((...args: Complex[]) => Complex);
@@ -37,41 +38,6 @@ export const bindings: Bindings = {
 
 const unexpectedExpressionType = (type: never) => new TypeError(`Unexpected expression type ${type}`);
 
-const transform = (expression: Expression): Expression<Complex> => {
-  const { type } = expression;
-
-  switch (type) {
-    case 'BinaryExpression':
-      return {
-        type,
-        operator: expression.operator,
-        left: transform(expression.left),
-        right: transform(expression.right),
-      };
-    case 'CallExpression':
-      return {
-        type,
-        callee: expression.callee,
-        arguments: expression.arguments.map(transform),
-      };
-    case 'Identifier':
-      return expression;
-    case 'Literal':
-      return {
-        type,
-        value: from(expression.value),
-      };
-    case 'UnaryExpression':
-      return {
-        type,
-        operator: expression.operator,
-        argument: transform(expression.argument),
-      };
-    default:
-      throw unexpectedExpressionType(type);
-  }
-};
-
 const binary: Record<BinaryExpression['operator'], (left: Complex, right: Complex) => Complex> = {
   '+': add,
   '-': sub,
@@ -86,70 +52,54 @@ const unary: Record<UnaryExpression['operator'], (arg: Complex) => Complex> = {
   '-': (arg) => new Complex(0 - arg._real, 0 - arg._imag, arg._abs, 0 - arg._arg, arg._has),
 };
 
-const toString = <T>(expression: Expression<T>): string => {
-  const { type } = expression;
-
-  switch (type) {
-    case 'BinaryExpression':
-      return `(${toString(expression.left)}${expression.operator}${toString(expression.right)})`;
-    case 'CallExpression':
-      return `${toString(expression.callee)}(${expression.arguments.map(toString).join(', ')})`;
-    case 'Identifier':
-      return expression.name;
-    case 'Literal':
-      return `${expression.value}`;
-    case 'UnaryExpression':
-      return `${expression.operator}${toString(expression.argument)}`;
-    default:
-      throw unexpectedExpressionType(type);
+const asComplexOrThrow = (value: Value) => {
+  if (typeof value !== 'object') {
+    throw new TypeError(`${typeof value} is not an object`);
   }
-};
 
-const assertComplex = (value: Value, expression: Expression<Complex>) => {
-  if (typeof value === 'function') {
-    throw new TypeError(`${toString(expression)} is a function`);
-  }
   return value;
 };
 
-const assertFunction = (value: Value, expression: Expression<Complex>) => {
+const asFunctionOrThrow = (value: Value) => {
   if (typeof value !== 'function') {
-    throw new TypeError(`${toString(expression)} is not a function`);
+    throw new TypeError(`${typeof value} is not a function`);
   }
+
   return value;
 };
 
-const convert = (expression: Expression<Complex>): (variables: Bindings) => Value => {
+const hasOwnProperty = (object: unknown, propertyKey: PropertyKey) => (
+  Object.prototype.hasOwnProperty.call(object, propertyKey)
+);
+
+const generate = (expression: Expression<Complex>): (variables: Bindings) => Value => {
   const { type } = expression;
 
   switch (type) {
     case 'BinaryExpression': {
       const operator = binary[expression.operator];
-      const left = convert(expression.left);
-      const right = convert(expression.right);
+      const left = generate(expression.left);
+      const right = generate(expression.right);
       return (variables) => operator(
-        assertComplex(left(variables), expression.left),
-        assertComplex(right(variables), expression.right),
+        asComplexOrThrow(left(variables)),
+        asComplexOrThrow(right(variables)),
       );
     }
     case 'CallExpression': {
-      const callee = convert(expression.callee);
-      const args = expression.arguments.map(convert);
-      return (variables) => assertFunction(
-        callee(variables), expression.callee,
-      ).apply(
+      const callee = generate(expression.callee);
+      const args = expression.arguments.map(generate);
+      return (variables) => asFunctionOrThrow(callee(variables)).apply(
         undefined,
-        args.map((argument, index) => assertComplex(
-          argument(variables), expression.arguments[index],
-        )),
+        args.map((argument) => asComplexOrThrow(argument(variables))),
       );
     }
     case 'Identifier': {
       const { name } = expression;
       return (variables) => {
-        if (!Object.prototype.hasOwnProperty.call(variables, name)) {
+        if (!hasOwnProperty(variables, name)) {
           throw new ReferenceError(`${name} is not defined`);
         }
+
         return variables[name];
       };
     }
@@ -159,17 +109,15 @@ const convert = (expression: Expression<Complex>): (variables: Bindings) => Valu
     }
     case 'UnaryExpression': {
       const operator = unary[expression.operator];
-      const argument = convert(expression.argument);
-      return (variables) => operator(
-        assertComplex(argument(variables), expression.argument),
-      );
+      const argument = generate(expression.argument);
+      return (variables) => operator(asComplexOrThrow(argument(variables)));
     }
     default:
       throw unexpectedExpressionType(type);
   }
 };
 
-const isConstant = (expression: Expression<Complex>, constants: Bindings): boolean => {
+const isConstant = (expression: Expression<unknown>, constants: Bindings): boolean => {
   const { type } = expression;
 
   switch (type) {
@@ -179,7 +127,7 @@ const isConstant = (expression: Expression<Complex>, constants: Bindings): boole
       return isConstant(expression.callee, constants)
         && expression.arguments.every((argument) => isConstant(argument, constants));
     case 'Identifier':
-      return Object.prototype.hasOwnProperty.call(constants, expression.name);
+      return hasOwnProperty(constants, expression.name);
     case 'Literal':
       return true;
     case 'UnaryExpression':
@@ -189,43 +137,55 @@ const isConstant = (expression: Expression<Complex>, constants: Bindings): boole
   }
 };
 
-const simplify = (expression: Expression<Complex>, constants: Bindings): Expression<Complex> => {
-  const { type } = expression;
+const asLiteralIfConstant = (
+  expression: Expression<Complex>, constants: Bindings,
+): Expression<Complex> => {
+  if (!isConstant(expression, constants)) {
+    return expression;
+  }
+
+  const evaluate = generate(expression);
+  return { type: 'Literal', value: asComplexOrThrow(evaluate(constants)) };
+};
+
+const transform = (real: Expression<number>, constants: Bindings): Expression<Complex> => {
+  const { type } = real;
 
   switch (type) {
     case 'BinaryExpression':
+      return asLiteralIfConstant({
+        type,
+        operator: real.operator,
+        left: transform(real.left, constants),
+        right: transform(real.right, constants),
+      }, constants);
     case 'CallExpression':
+      return asLiteralIfConstant({
+        type,
+        callee: real.callee,
+        arguments: real.arguments.map((argument) => transform(argument, constants)),
+      }, constants);
+    case 'Identifier':
+      return real;
+    case 'Literal':
+      return {
+        type,
+        value: from(real.value),
+      };
     case 'UnaryExpression':
-      if (isConstant(expression, constants)) {
-        return { type: 'Literal', value: assertComplex(convert(expression)(constants), expression) };
-      }
-
-      if (type === 'BinaryExpression') {
-        return {
-          type,
-          operator: expression.operator,
-          left: simplify(expression.left, constants),
-          right: simplify(expression.right, constants),
-        };
-      }
-
-      if (type === 'CallExpression') {
-        return {
-          type,
-          callee: expression.callee,
-          arguments: expression.arguments.map((argument) => simplify(argument, constants)),
-        };
-      }
-
-      return expression;
+      return asLiteralIfConstant({
+        type,
+        operator: real.operator,
+        argument: transform(real.argument, constants),
+      }, constants);
     default:
-      return expression;
+      throw unexpectedExpressionType(type);
   }
 };
 
 const compile = (expression: string, constants: Bindings = {}): (variables: Bindings) => Value => {
   const record = Object.assign({}, bindings, constants);
-  const evaluate = convert(simplify(transform(parse(expression)), record));
+  const evaluate = generate(transform(parse(expression), record));
   return (variables) => evaluate(Object.assign({}, record, variables));
 };
 

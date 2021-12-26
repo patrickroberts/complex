@@ -1,5 +1,6 @@
 import { Grammar, Parser } from 'nearley';
-import grammar, { Expression } from './grammar';
+import { Expression } from '../expressions';
+import grammar from './grammar';
 
 let parser: Parser;
 let state: ReturnType<Parser['save']>;
