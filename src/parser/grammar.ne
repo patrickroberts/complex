@@ -32,15 +32,9 @@ export interface Literal {
 
 export type Expression = BinaryExpression | UnaryExpression | CallExpression | Identifier | Literal;
 
-const unwrap = (d: any[]): Expression => d[1];
-const binary = (d: any[]): BinaryExpression => ({ type: 'BinaryExpression', operator: d[2], left: d[0], right: d[4] });
-const unary = (d: any[]): UnaryExpression => ({ type: 'UnaryExpression', operator: d[0], argument: d[2] });
-const call = (d: any[]): CallExpression => ({ type: 'CallExpression', callee: d[0], arguments: d[2] });
-const identifier = (d: any[]): Identifier => ({ type: 'Identifier', name: d[0] });
-const literal = (d: any[]): Literal => ({ type: 'Literal', value: Number(d[0]) });
-const fold = (d: any[]): Expression[] => d[0].concat(d[2]);
-const empty = (): Expression[] => [];
-const join = (d: any[]): string => d.join('');
+const unwrap = (d: any[]) => d[1];
+const binary = (d: any[]) => ({ type: 'BinaryExpression', operator: d[2], left: d[0], right: d[4] });
+const join = (d: any[]) => d.join('');
 %}
 
 Expression -> _ AdditiveExpression _ {% unwrap %}
@@ -58,26 +52,31 @@ MultiplicativeExpression ->
 
 ExponentiationExpression ->
     UnaryExpression {% id %}
-  | LeftHandSideExpression _ "**" _ ExponentiationExpression {% binary %}
+  | LeftHandSideExpression _ ExponentiationOperator _ ExponentiationExpression {% binary %}
+
+ExponentiationOperator -> "*" "*" {% join %}
 
 UnaryExpression ->
     LeftHandSideExpression {% id %}
-  | "+" _ UnaryExpression {% unary %}
-  | "-" _ UnaryExpression {% unary %}
+  | UnaryOperator _ UnaryExpression {% d => ({ type: 'UnaryExpression', operator: d[0], argument: d[2] }) %}
+
+UnaryOperator ->
+    "+" {% id %}
+  | "-" {% id %}
 
 LeftHandSideExpression -> 
     PrimaryExpression {% id %}
   | CallExpression {% id %}
 
-CallExpression -> Identifier _ Arguments {% call %}
+CallExpression -> Identifier _ Arguments {% d => ({ type: 'CallExpression', callee: d[0], arguments: d[2] }) %}
 
 Arguments ->
-    "(" _ ")" {% empty %}
+    "(" _ ")" {% () => [] %}
   | "(" ArgumentList ")" {% unwrap %}
 
 ArgumentList ->
     Expression
-  | ArgumentList "," Expression {% fold %}
+  | ArgumentList "," Expression {% d => d[0].concat(d[2]) %}
 
 PrimaryExpression ->
     Identifier {% id %}
@@ -86,7 +85,7 @@ PrimaryExpression ->
 
 ParenthesizedExpression -> "(" Expression ")" {% unwrap %}
 
-Identifier -> IdentifierName {% identifier %}
+Identifier -> IdentifierName {% d => ({ type: 'Identifier', name: d[0] }) %}
 
 IdentifierName ->
     IdentifierStart {% join %}
@@ -96,16 +95,21 @@ IdentifierStart -> [$A-Z_a-z]
 
 IdentifierPart -> [$0-9A-Z_a-z]
 
-Literal -> NumericLiteral {% literal %}
+Literal -> NumericLiteral {% d => ({ type: 'Literal', value: Number(d[0]) }) %}
 
 NumericLiteral ->
     DecimalLiteral {% id %}
   | NonDecimalIntegerLiteral {% id %}
 
 DecimalLiteral ->
-    DecimalIntegerLiteral "." DecimalDigits:? ExponentPart:? {% join %}
-  | "." DecimalDigits ExponentPart:? {% join %}
-  | DecimalIntegerLiteral ExponentPart:? {% join %}
+    DecimalIntegerLiteral "." {% join %}
+  | DecimalIntegerLiteral "." DecimalDigits {% join %}
+  | DecimalIntegerLiteral "." DecimalDigits ExponentPart {% join %}
+  | DecimalIntegerLiteral "." ExponentPart {% join %}
+  | "." DecimalDigits {% join %}
+  | "." DecimalDigits ExponentPart {% join %}
+  | DecimalIntegerLiteral {% join %}
+  | DecimalIntegerLiteral ExponentPart {% join %}
 
 DecimalIntegerLiteral ->
     "0"
@@ -131,16 +135,16 @@ NonDecimalIntegerLiteral ->
   | HexIntegerLiteral {% id %}
 
 BinaryIntegerLiteral ->
-    "0b" BinaryDigits {% join %}
-  | "0B" BinaryDigits {% join %}
+    "0" "b" BinaryDigits {% join %}
+  | "0" "B" BinaryDigits {% join %}
 
 OctalIntegerLiteral ->
-    "0o" OctalDigits {% join %}
-  | "0O" OctalDigits {% join %}
+    "0" "o" OctalDigits {% join %}
+  | "0" "O" OctalDigits {% join %}
 
 HexIntegerLiteral ->
-    "0x" HexDigits {% join %}
-  | "0X" HexDigits {% join %}
+    "0" "x" HexDigits {% join %}
+  | "0" "X" HexDigits {% join %}
 
 DecimalDigits ->
     DecimalDigit {% id %}
