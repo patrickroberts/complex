@@ -6,4 +6,4 @@ export {
   mod, mul, polar, pow, proj, sin, sinh, sqrt, sub, tan, tanh, trunc,
 } from './static';
 export { default as parse } from './parser';
-export { Bindings, Value, bindings, compile } from './compiler';
+export { Bindings, Value, bindings, default as compile } from './compiler';

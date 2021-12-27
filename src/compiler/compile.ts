@@ -148,35 +148,35 @@ const asLiteralIfConstant = (
   return { type: 'Literal', value: asComplexOrThrow(evaluate(constants)) };
 };
 
-const transform = (real: Expression<number>, constants: Bindings): Expression<Complex> => {
-  const { type } = real;
+const transform = (expression: Expression<number>, constants: Bindings): Expression<Complex> => {
+  const { type } = expression;
 
   switch (type) {
     case 'BinaryExpression':
       return asLiteralIfConstant({
         type,
-        operator: real.operator,
-        left: transform(real.left, constants),
-        right: transform(real.right, constants),
+        operator: expression.operator,
+        left: transform(expression.left, constants),
+        right: transform(expression.right, constants),
       }, constants);
     case 'CallExpression':
       return asLiteralIfConstant({
         type,
-        callee: real.callee,
-        arguments: real.arguments.map((argument) => transform(argument, constants)),
+        callee: expression.callee,
+        arguments: expression.arguments.map((argument) => transform(argument, constants)),
       }, constants);
     case 'Identifier':
-      return real;
+      return expression;
     case 'Literal':
       return {
         type,
-        value: from(real.value),
+        value: from(expression.value),
       };
     case 'UnaryExpression':
       return asLiteralIfConstant({
         type,
-        operator: real.operator,
-        argument: transform(real.argument, constants),
+        operator: expression.operator,
+        argument: transform(expression.argument, constants),
       }, constants);
     default:
       throw unexpectedExpressionType(type);
