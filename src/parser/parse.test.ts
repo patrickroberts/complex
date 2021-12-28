@@ -1,4 +1,4 @@
-import { BinaryExpression, CallExpression, Identifier, Literal, UnaryExpression } from './grammar';
+import { BinaryExpression, CallExpression, Identifier, Literal, UnaryExpression } from '../expressions';
 import sut from './parse';
 
 describe('parse', () => {
