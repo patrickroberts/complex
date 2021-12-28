@@ -1,37 +1,6 @@
 @preprocessor typescript
 
 @{%
-export interface BinaryExpression {
-  type: 'BinaryExpression';
-  operator: '+' | '-' | '*' | '/' | '%' | '**';
-  left: Expression;
-  right: Expression;
-}
-
-export interface UnaryExpression {
-  type: 'UnaryExpression';
-  operator: '+' | '-';
-  argument: Expression;
-}
-
-export interface CallExpression {
-  type: 'CallExpression';
-  callee: Identifier;
-  arguments: Expression[];
-}
-
-export interface Identifier {
-  type: 'Identifier';
-  name: string;
-}
-
-export interface Literal {
-  type: 'Literal';
-  value: number;
-}
-
-export type Expression = BinaryExpression | UnaryExpression | CallExpression | Identifier | Literal;
-
 const unwrap = (d: any[]) => d[1];
 const binary = (d: any[]) => ({ type: 'BinaryExpression', operator: d[2], left: d[0], right: d[4] });
 const join = (d: any[]) => d.join('');
