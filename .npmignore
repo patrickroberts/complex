@@ -1,4 +1,5 @@
 .github/
+assets/
 coverage/
 docs/
 dst/cjs/*.d.ts

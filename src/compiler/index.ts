@@ -1,1 +1,1 @@
-export { Bindings, Value, bindings, default } from './compile';
+export { Bindings, Value, bindings, default as compile } from './compile';
