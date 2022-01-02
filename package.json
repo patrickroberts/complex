@@ -1,6 +1,6 @@
 {
   "name": "complex-js",
-  "version": "7.0.1",
+  "version": "7.1.0",
   "description": "Complex math module for JavaScript",
   "repository": "github:patrickroberts/complex",
   "homepage": "https://patrickroberts.github.io/complex/",
@@ -9,6 +9,7 @@
   "module": "dst/esm/complex.js",
   "browser": "dst/umd/complex.js",
   "types": "dst/esm/complex.d.ts",
+  "keywords": ["complex", "math", "parser", "compiler"],
   "scripts": {
     "clean:test": "rimraf coverage",
     "clean:build": "rimraf dst src/**/*.js src/**/*.d.ts src/parser/grammar.ts",

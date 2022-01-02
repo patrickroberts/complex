@@ -72,22 +72,23 @@ const hasOwnProperty = (object: unknown, propertyKey: PropertyKey) => (
   Object.prototype.hasOwnProperty.call(object, propertyKey)
 );
 
-const generate = (expression: Expression<Complex>): (variables: Bindings) => Value => {
+const generate = (expression: Expression<Complex>, constants: Bindings):
+(variables: Bindings) => Value => {
   const { type } = expression;
 
   switch (type) {
     case 'BinaryExpression': {
       const operator = binary[expression.operator];
-      const left = generate(expression.left);
-      const right = generate(expression.right);
+      const left = generate(expression.left, constants);
+      const right = generate(expression.right, constants);
       return (variables) => operator(
         asComplexOrThrow(left(variables)),
         asComplexOrThrow(right(variables)),
       );
     }
     case 'CallExpression': {
-      const callee = generate(expression.callee);
-      const args = expression.arguments.map(generate);
+      const callee = generate(expression.callee, constants);
+      const args = expression.arguments.map((argument) => generate(argument, constants));
       return (variables) => asFunctionOrThrow(callee(variables)).apply(
         undefined,
         args.map((argument) => asComplexOrThrow(argument(variables))),
@@ -97,7 +98,11 @@ const generate = (expression: Expression<Complex>): (variables: Bindings) => Val
       const { name } = expression;
       return (variables) => {
         if (!hasOwnProperty(variables, name)) {
-          throw new ReferenceError(`${name} is not defined`);
+          if (!hasOwnProperty(constants, name)) {
+            throw new ReferenceError(`${name} is not defined`);
+          }
+
+          return constants[name];
         }
 
         return variables[name];
@@ -109,7 +114,7 @@ const generate = (expression: Expression<Complex>): (variables: Bindings) => Val
     }
     case 'UnaryExpression': {
       const operator = unary[expression.operator];
-      const argument = generate(expression.argument);
+      const argument = generate(expression.argument, constants);
       return (variables) => operator(asComplexOrThrow(argument(variables)));
     }
     default:
@@ -144,7 +149,7 @@ const asLiteralIfConstant = (
     return expression;
   }
 
-  const evaluate = generate(expression);
+  const evaluate = generate(expression, constants);
   return { type: 'Literal', value: asComplexOrThrow(evaluate(constants)) };
 };
 
@@ -183,10 +188,10 @@ const transform = (expression: Expression<number>, constants: Bindings): Express
   }
 };
 
-const compile = (expression: string, constants: Bindings = {}): (variables: Bindings) => Value => {
+const compile = (expression: string, constants: Bindings = {}): (variables?: Bindings) => Value => {
   const record = Object.assign({}, bindings, constants);
-  const evaluate = generate(transform(parse(expression), record));
-  return (variables) => evaluate(Object.assign({}, record, variables));
+  const evaluate = generate(transform(parse(expression), record), record);
+  return (variables = {}) => evaluate(variables);
 };
 
 export default compile;
