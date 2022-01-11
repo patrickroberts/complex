@@ -28,23 +28,23 @@ export default class Complex {
   }
 
   public get real(): number {
-    return real(Complex, this);
+    return real(this);
   }
 
   public get imag(): number {
-    return imag(Complex, this);
+    return imag(this);
   }
 
   public get abs(): number {
-    return abs(Complex, this);
+    return abs(this);
   }
 
   public get arg(): number {
-    return arg(Complex, this);
+    return arg(this);
   }
 
   public get norm(): number {
-    return norm(Complex, this);
+    return norm(this);
   }
 
   public add(this: Complex, z: Complex): Complex {

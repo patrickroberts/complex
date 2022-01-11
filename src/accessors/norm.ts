@@ -1,9 +1,7 @@
 import Complex from '../complex';
-import { Component, invariant } from '../internal';
+import { Component } from '../internal';
 
-const norm = (Ctor: typeof Complex, z: Complex): number => {
-  invariant(Ctor, z);
-
+const norm = (z: Complex): number => {
   if (z._has & Component.ABS) {
     return z._abs * z._abs;
   }

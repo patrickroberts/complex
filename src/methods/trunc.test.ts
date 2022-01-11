@@ -21,8 +21,8 @@ it('should initialize polar components from cartesian components', () => {
 
   const actual = sut(Complex, z);
 
-  expect(real).toHaveBeenCalledWith(Complex, z);
-  expect(imag).toHaveBeenCalledWith(Complex, z);
+  expect(real).toHaveBeenCalledWith(z);
+  expect(imag).toHaveBeenCalledWith(z);
   expect(Complex).toHaveBeenCalledWith(
     Math.trunc(testReal), Math.trunc(testImag), _, _, Component.CARTESIAN,
   );

@@ -29,10 +29,10 @@ test.each([
 
   const actual = sut(Complex, a, b);
 
-  expect(real).toHaveBeenCalledWith(Complex, a);
-  expect(real).toHaveBeenCalledWith(Complex, b);
-  expect(imag).toHaveBeenCalledWith(Complex, a);
-  expect(imag).toHaveBeenCalledWith(Complex, b);
+  expect(real).toHaveBeenCalledWith(a);
+  expect(real).toHaveBeenCalledWith(b);
+  expect(imag).toHaveBeenCalledWith(a);
+  expect(imag).toHaveBeenCalledWith(b);
   expect(Complex).toHaveBeenCalledWith(expectedReal, expectedImag, _, _, Component.CARTESIAN);
   expect(actual).toBe(expected);
 });

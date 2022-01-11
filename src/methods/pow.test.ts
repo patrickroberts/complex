@@ -39,8 +39,8 @@ it('should invert any base with an exponent of -1', () => {
 
   const actual = sut(Complex, lhs, rhs);
 
-  expect(real).toHaveBeenCalledWith(Complex, rhs);
-  expect(imag).toHaveBeenCalledWith(Complex, rhs);
+  expect(real).toHaveBeenCalledWith(rhs);
+  expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
   expect(Complex).toHaveBeenCalledWith(1, 0, 1, 0, Component.ALL);
@@ -58,8 +58,8 @@ it('should return 1 for any base with an exponent of 0', () => {
 
   const actual = sut(Complex, lhs, rhs);
 
-  expect(real).toHaveBeenCalledWith(Complex, rhs);
-  expect(imag).toHaveBeenCalledWith(Complex, rhs);
+  expect(real).toHaveBeenCalledWith(rhs);
+  expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
   expect(Complex).toHaveBeenCalledWith(1, 0, 1, 0, Component.ALL);
@@ -74,8 +74,8 @@ it('should return any base with an exponent of 1', () => {
 
   const actual = sut(Complex, lhs, rhs);
 
-  expect(real).toHaveBeenCalledWith(Complex, rhs);
-  expect(imag).toHaveBeenCalledWith(Complex, rhs);
+  expect(real).toHaveBeenCalledWith(rhs);
+  expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
   expect(Complex).not.toHaveBeenCalled();
@@ -92,8 +92,8 @@ it('should square any base with an exponent of 2', () => {
 
   const actual = sut(Complex, lhs, rhs);
 
-  expect(real).toHaveBeenCalledWith(Complex, rhs);
-  expect(imag).toHaveBeenCalledWith(Complex, rhs);
+  expect(real).toHaveBeenCalledWith(rhs);
+  expect(imag).toHaveBeenCalledWith(rhs);
   expect(abs).not.toHaveBeenCalled();
   expect(arg).not.toHaveBeenCalled();
   expect(Complex).not.toHaveBeenCalled();
@@ -109,16 +109,16 @@ test.each([
   const a = new Complex(lhs[0], lhs[1], _, _, Component.CARTESIAN);
   const b = new Complex(rhs[0], rhs[1], _, _, Component.CARTESIAN);
 
-  mock(abs).mockImplementationOnce((Ctor, z) => Math.hypot(z._real, z._imag));
-  mock(arg).mockImplementationOnce((Ctor, z) => Math.atan2(z._imag, z._real));
+  mock(abs).mockImplementationOnce((z) => Math.hypot(z._real, z._imag));
+  mock(arg).mockImplementationOnce((z) => Math.atan2(z._imag, z._real));
   mock(Complex).mockClear();
 
   const actual = sut(Complex, a, b);
 
-  expect(real).toHaveBeenCalledWith(Complex, b);
-  expect(imag).toHaveBeenCalledWith(Complex, b);
-  expect(abs).toHaveBeenCalledWith(Complex, a);
-  expect(arg).toHaveBeenCalledWith(Complex, a);
+  expect(real).toHaveBeenCalledWith(b);
+  expect(imag).toHaveBeenCalledWith(b);
+  expect(abs).toHaveBeenCalledWith(a);
+  expect(arg).toHaveBeenCalledWith(a);
   expect(Complex).toHaveBeenCalledWith(_, _, _, _, Component.POLAR);
   expect(Complex).toHaveReturnedWith(actual);
   expect(actual._abs).toBeCloseTo(expectedAbs, precision(expectedAbs));

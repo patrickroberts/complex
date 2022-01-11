@@ -86,7 +86,7 @@ describe.each<['real' | 'imag' | 'abs' | 'arg' | 'norm', typeof real]>([
 
       const actual = z[name];
 
-      expect(impl).toHaveBeenCalledWith(Complex, z);
+      expect(impl).toHaveBeenCalledWith(z);
       expect(actual).toBe(expected);
     });
   });

@@ -5,8 +5,8 @@ import mul from './mul';
 import div from './div';
 
 const pow = (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
-  const c = real(Ctor, rhs);
-  const d = imag(Ctor, rhs);
+  const c = real(rhs);
+  const d = imag(rhs);
 
   if (d === 0) {
     switch (c) {
@@ -18,8 +18,8 @@ const pow = (Ctor: typeof Complex, lhs: Complex, rhs: Complex): Complex => {
     }
   }
 
-  const m = abs(Ctor, lhs);
-  const a = arg(Ctor, lhs);
+  const m = abs(lhs);
+  const a = arg(lhs);
 
   return new Ctor(0, 0, m ** c * Math.exp(-a * d), d * Math.log(m) + a * c, Component.POLAR);
 };
